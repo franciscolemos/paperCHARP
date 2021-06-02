@@ -1,0 +1,70 @@
+\subsection{Sets}
+
+\begin{table}[h!]
+	\centering
+	\caption{ARRP sets}
+	\label{tbl:sets}
+		
+	\begin{tabular}{ll}
+		\hline
+		$A$   & Set of all airports, indexed by $a$   \\ 
+		$P$   & Set of all aircraft, indexed by $p$   \\ 
+
+		$\mathcal{D}$   & Set of flight disruptions, indexed by $d$ \\
+		$\mathcal{B}$   & Set of aircraft disruption, indexed by $b$ \\
+		$\mathcal{R}$	& Set of airport disruptions, indexed by $r$ \\
+		\hline	
+	\end{tabular}
+\end{table}
+
+
+\subsection{Parameters}
+
+
+\begin{table}[h!]
+	\centering
+	\caption{ARP parameters}
+	\label{tbl:parameters}
+		\begin{tabular}{ll}
+		\hline
+		$RTW_s$   & Start of the recovery time window   \\ 
+		$RTW_e$   & End of the recovery time window     \\ 
+		$c^{lh}_a$ & Maximum number of arrivals $l$ during time window $h$ at airport $a$ \\
+		$c^{th}_a$ & Maximum number of departures $l$ during time window $h$ at airport $a$ \\
+		$d_{a_{1} a_{2}}$ & Distance measured  in flight minutes between airports $a_{1}$ and $a_{2}$ \\
+		$\sigma_p $ & Rotation of aircraft $p$ \\
+		$\sigma^o_p(i)$ & $i^th$  flight leg's origin airport $o$ for the rotation of aircraft $p$ \\
+		$\sigma^f_p(i)$ & $i^th$  flight leg's destination airport $f$ for the rotation of aircraft $p$ \\
+		$\sigma^d_p(i)$ & $i^th$  flight leg's origin departure time $d$ for the rotation of aircraft $p$ \\
+		$\sigma^a_p(i)$ & $i^th$  flight leg's destination arrival time $a$ for the rotation of aircraft $p$ \\
+		%$ s_g$ & Size of the group of passengers  $g$ \\
+		%$O_g$ & Origin airport of the group of passengers $g$ \\
+		%$D_g$ & Destination airport of the group of passengers $g$ \\
+		%$p_g$ & Ticket price for the group of passengers $g$ \\
+		%$\omega_g$ & Type of itinerary (A outbound, R inbound) \\
+		$O_p$ & Origin airport of aircraft $p$ \\
+		$t_{rp}$ & Turn-round time for aircraft $p$ \\
+		%$\gamma_g(i)$ & $i^th$ leg in an itinerary \\
+		%$|\gamma|$ & Number of legs in an itinerary \\
+		%$\gamma^o_p(i)$ & $i_{th}$ leg in an itinerary departing  from origin airport $o$ operated by aircraft $p$\\
+		%$\gamma^d_p(i)$ & $i_{th}$ leg in an itinerary departing at instant $d$ operated by aircraft $p$\\
+		%$\gamma^f_p(i)$ & $i_{th}$ leg in an itinerary landing  at origin airport $f$ operated by aircraft $p$\\
+		%$\gamma^a_p(i)$ & $i_{th}$ leg in an itinerary arriving at instant $a$ operated by aircraft $p$\\
+		%$c_d$ & Minimum connection time between two consecutive legs in an itinerary\\
+		%$ml$ & Maximum delay for an outbound itinerary\\
+		\hline		
+	\end{tabular}
+\end{table}
+
+
+The start (respectively, the end) of the recovery
+time window is denoted $ RTW_s $ (respectively, $ RTW_e $). The recovery time window is divided
+into smaller time windows equal to one hour, denoted $ h \subseteq RTW $.\\ 
+
+The information regarding the starting and ending of the $RTW$ is set in the first line of the $config.csv$ file $e.g.$:\\
+\newline
+{\texttt{\footnotesize 01/03/08 16:00 03/03/08 04:00 }}
+
+
+
+%In this paper we consider three types of disruptions: flight, aircraft and airport disruptions. Flight disruptions refer to flight delays or cancellations. Aircraft disruptions consist of time periods where an aircraft is unavailable, which is mainly caused by mechanical failures or industrial action. Airport disruptions refer to airport closures usually incurred by severe weather conditions. When these disruptions happen, the flights assigned to the disrupted aircraft cannot be operated. 

@@ -1,0 +1,50 @@
+This is BibTeX, Version 0.99d
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main.tex.aux
+Reallocating 'name_of_file' (item size: 1) to 12 items.
+The style file: informs2014.bst
+Reallocating 'name_of_file' (item size: 1) to 10 items.
+Database file #1: myLibrary.bib
+Warning--empty journal in Love2001
+You've used 24 entries,
+            2869 wiz_defined-function locations,
+            772 strings with 10032 characters,
+and the built_in function-call counts, 23951 in all, are:
+= -- 2445
+> -- 633
+< -- 8
++ -- 243
+- -- 211
+* -- 1796
+:= -- 2953
+add.period$ -- 45
+call.type$ -- 24
+change.case$ -- 189
+chr.to.int$ -- 25
+cite$ -- 25
+duplicate$ -- 2404
+empty$ -- 1845
+format.name$ -- 294
+if$ -- 4904
+int.to.chr$ -- 2
+int.to.str$ -- 1
+missing$ -- 248
+newline$ -- 78
+num.names$ -- 96
+pop$ -- 1146
+preamble$ -- 1
+purify$ -- 166
+quote$ -- 0
+skip$ -- 401
+stack$ -- 0
+substring$ -- 2504
+swap$ -- 609
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 213
+warning$ -- 1
+while$ -- 169
+width$ -- 0
+write$ -- 272
+(There was 1 warning)

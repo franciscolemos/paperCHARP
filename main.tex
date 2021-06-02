@@ -1,0 +1,418 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Author template for INFORMS Journal on Optimization (ijoo) 
+%%   [interim solution; new styles under construction]
+%% Mirko Janc, Ph.D., INFORMS, mirko.janc@informs.org
+%% ver. 0.93, November 2017
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[ijoo,nonblindrev]{informs-ijoo}
+
+\OneAndAHalfSpacedXI
+%%\OneAndAHalfSpacedXII % Current default line spacing
+%%\DoubleSpacedXII
+%%\DoubleSpacedXI
+
+% Private macros here (check that there is no clash with the style)
+
+% Natbib setup for author-year style
+\usepackage{natbib}
+ \bibpunct[, ]{(}{)}{,}{a}{}{,}%
+ \def\bibfont{\small}%
+ \def\bibsep{\smallskipamount}%
+ \def\bibhang{24pt}%
+ \def\newblock{\ }%
+ \def\BIBand{and}%
+\usepackage{comment}
+\usepackage{xcolor}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+\usepackage{amsmath}
+\usepackage{soul}
+%% Setup of theorem styles. Outcomment only one.
+%% Preferred default is the first option.
+\TheoremsNumberedThrough     % Preferred (Theorem 1, Lemma 1, Theorem 2)
+%\TheoremsNumberedByChapter  % (Theorem 1.1, Lema 1.1, Theorem 1.2)
+\ECRepeatTheorems
+
+%% Setup of the equation numbering system. Outcomment only one.
+%% Preferred default is the first option.
+\EquationsNumberedThrough    % Default: (1), (2), ...
+%\EquationsNumberedBySection % (1.1), (1.2), ...
+
+% For new submissions, leave this number blank.
+% For revisions, input the manuscript number assigned by the on-line
+% system along with a suffix ".Rx" where x is the revision number.
+\MANUSCRIPTNO{MS-0001-1922.65}
+
+%%%%%%%%%%%%%%%%
+\begin{document}
+%%%%%%%%%%%%%%%%
+
+% Outcomment only when entries are known. Otherwise leave as is and
+%   default values will be used.
+%\setcounter{page}{1}
+%\VOLUME{00}%
+%\NO{0}%
+%\MONTH{Xxxxx}% (month or a similar seasonal id)
+%\YEAR{0000}% e.g., 2005
+%\FIRSTPAGE{000}%
+%\LASTPAGE{000}%
+%\SHORTYEAR{00}% shortened year (two-digit)
+%\ISSUE{0000} %
+%\LONGFIRSTPAGE{0001} %
+%\DOI{10.1287/xxxx.0000.0000}%
+
+% Author's names for the running heads
+% Sample depending on the number of authors;
+% \RUNAUTHOR{Jones}
+\RUNAUTHOR{Slippery and Arinella}
+% \RUNAUTHOR{Jones, Miller, and Wilson}
+% \RUNAUTHOR{Jones et al.} % for four or more authors
+% Enter authors following the given pattern:
+%\RUNAUTHOR{}
+
+% Title or shortened title suitable for running heads. Sample:
+% \RUNTITLE{Bundling Information Goods of Decreasing Value}
+% Enter the (shortened) title:
+\RUNTITLE{Tis a Butter Place}
+
+% Full title. Sample:
+% \TITLE{Bundling Information Goods of Decreasing Value}
+% Enter the full title:
+\TITLE{A Constructive Heuristic for the Aircraft Recovery Problem}
+
+% Block of authors and their affiliations starts here:
+% NOTE: Authors with same affiliation, if the order of authors allows,
+%   should be entered in ONE field, separated by a comma.
+%   \EMAIL field can be repeated if more than one author
+\ARTICLEAUTHORS{%
+\AUTHOR{Francisco de Lemos}
+\AFF{School of Electronic Engineering and Computer Science, Queen Mary University of London, 10 Godward Square, Mile End Rd, Mile End, London E1 4FZ, \EMAIL{f.j.r.lemos@qmul.ac.uk}} %, \URL{}}
+\AUTHOR{John Woodward}
+\AFF{School of Electronic Engineering and Computer Science, Queen Mary University of London, 10 Godward Square, Mile End Rd, Mile End, London E1 4FZ, \EMAIL{j.woodward@qmul.ac.uk}}
+% Enter all authors
+} % end of the block
+
+\ABSTRACT{%% Enter your abstract
+%%%%%%%%%%%%%%problem description
+	\hl{ An aircraft rotation consists in assigning flights to aircraft in such a way that operational constraints, such as, aircraft maintenance, flight continuity, turn-round time and airport capacity for departure and arrival, are satisfied. Aircraft rotations in commercial aviation are often subject to disruption making them infeasible. The Aircraft Recovery Problem (ARP) consists in altering the flight and aircraft schedules to compensate the disruptions in the rotations that result in the temporary or permanent unavailability of aircraft.}\\
+%%%%%%%%%%%%%%technique descriptions	
+In this paper we present a Constructive Heuristic for the Aircraft Recovery Problem (CHARP) using constraint satisfaction programming. 
+The recovery procedure that we propose consists in determining the first infeasible flight and from here on, in finding for the remaing flights the respective domains. We derive the search space by computing the cartesian product of those domains, and for each of the possible combinations we determine its feasibility. We define upper and lower bounds of the search space and depending of its size we use an upper and lower heuristic that execute a pincer movement to traverse it in order to find feasible solutions.
+Both heuristics use Constraint Satisfaction Programming, however the upper bound heuristic iteratively recovers the rotation to near optimality whereas the lower bound recovers recovers it to optimality.
+During the recovery procedure we introduce new flights in the infeasible part of the rotation. We will also add taxi flights, if we find discontinuity when we reconnect the fesible solution to the rotation.
+We Validate the CHARP using the ROADEF 2009 Challenge rotations, and we study the effects of introducing new flights, taxi flight and the CHARP parameters. 
+}
+
+% Sample
+%\KEYWORDS{deterministic inventory theory; infinite linear programming duality;
+%  existence of optimal policies; semi-Markov decision process; cyclic schedule}
+
+% Fill in data. If unknown, outcomment the field
+\KEYWORDS{Constraint satisfaction, aircraft, disruption, recovery} 
+%\HISTORY{This paper was
+%first submitted on December 12, 2020 and has been with the authors for
+%83 years for 65 revisions.}
+
+\maketitle
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Samples of sectioning (and labeling) in MNSC
+% NOTE: (1) \section and \subsection do NOT end with a period
+%       (2) \subsubsection and lower need end punctuation
+%       (3) capitalization is as shown (title style).
+%
+%\section{Introduction.}\label{intro} %%1.
+%\subsection{Duality and the Classical EOQ Problem.}\label{class-EOQ} %% 1.1.
+%\subsection{Outline.}\label{outline1} %% 1.2.
+%\subsubsection{Cyclic Schedules for the General Deterministic SMDP.}
+%  \label{cyclic-schedules} %% 1.2.1
+%\section{Problem Description.}\label{problemdescription} %% 2.
+
+% Text of your paper here
+
+\section{Introduction}
+
+The objective for airline companies consist in maximize their profits while operating flights according to a schedule. Therefore, airlines generally create tight schedules in order to increase their profitability. These tight schedules, have a minimum slack between flights legs, because they rely on the assumption that the flight legs will be operated as planned. A rotation consists in assigning an aircraft to a flight schedule while complying with operational constraints such as such as, aircraft maintenance, flight continuity, turn-round time and airport capacity for departure and arrival.
+Flight operations are in many occasions subject to irregularities that can complicate its execution.
+A significant number of factors, such as mechanical failures, crew delays, problems with ground operations, industrial action, inclement weather, congestion at airports can cause disruptions such as flight delays or cancellations. As a result the initial rotation becomes inefficient in the sense that flights have to be delayed or cancelled. Since airline companies are liable to pay compensation for the resulting passenger inconvenience in these situations, leading ultimately to a negative financial impact on an airline company’s profits, it thus becomes of the most importance to resume normal operations as quickly as possible.\\
+%%%%%%%%%%%%%%%%%%%
+In case of disruptions, a feasible rotation must be determined for a period of time. The period of time is designated by the recovery time window (RTW). During the RTW a feasible rotation must be found to minimize the costs that result form flight delay or cancellation. The latter consists of a process called disruption recovery.\\
+Disruption recovery is a real-time practice that requires finding a fast solution when irregularities occur. Often, disruptions take place during operations ($i.$ $e.$, only in few particular cases, it is possible to know a disruption in-advance), and a provisional plan has to be provided quickly. Thus, it is necessary to construct efficient algorithms to have good solution in minutes. It is also very important to refer that when disruptions occur they can affect more than just the directly disrupted flight, and can send a shock-wave of disruptions through the network. To resume normal operations it is necessary to implement certain actions during the RTW. It is during its duration that actions should be implemented to re-plan usage of resources all over the entire network of flights. The objective that is intend to meet is to find a solution with minimal flight cancellation and delay, while meeting the constraints associated with flight time, aircraft or airport capacity and passenger itineraries. In this paper we will focus solely in recovering the aircraft rotation, which is a specific part of the broader problem known as the aircraft recovery problem (ARP). To achieve this objective we will use the  data sets for the ROADEF 2009 Challenge.\\
+Every two years the \textit{French society of Operational Research and Decision Making} releases the ROADEF Challenge, which consists on a competition to solve a complex optimization problem that occurs in industry. In the ROADEF 2009 Challenge there is a step-wise simplification of a model, for disruption management in commercial aviation that aims at finding recovery planning of flights, aircraft assignments and passengers (including flight leg cancellation) on a given maximal horizon, so that a sum of penalties corresponding to various costs or discomforts is minimized. The present work is based on ROADEF 2009 Challengee and intends to develop a series of methodologies that will result in the generation of recovery processes for the disruptions induced by flight delays or cancellations, aircraft availability shortage or airport capacity decrease.\\
+\begin{comment}
+After retrieving the results for the ARRP using our algorithm, we will validate it using a flight schedule based on citep francis2020
+\end{comment}
+
+
+The remainder of the paper is organized as follows: an overview of the relevant literature is provided in Section \ref{sec:litRev}; the model for the aircraft  recovery problem is provided in Section \ref{sec:modelARP}; the  CHARP will be described in detail in Section \ref{sec:algorithms}; the computational results will be presented in Section \ref{sec:compResults}; the conclusions will be drawn in Section \ref{sec:conclusions}.
+
+
+\section{Literature Review}\label{sec:litRev}
+
+
+ \hl{During the years several methodologies have been developed for the ARP and in this section provides a detailed overview of the relevant studies. We first present in Section} \ref{sec:aircRecovery} \hl{an extensive literature review regarding the different methods used in the past thirty five years to perform aircraft recovery. In Section} \ref{sec:integratedRecovery} \hl{ we focus in reviewing the the methods that integrate the the ARP with passenger recovery problem (PRP), in particular, since we are using the ROADEF 2009 Challenge data sets, we will provide the literature review of the methods used in this competition.}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%section Aircraft Recovery
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Aircraft Recovery}\label{sec:aircRecovery}
+\citep{TEODOROVIC1984} developed a network model that minimizes the total passenger delay on an airline network and solved the problem of finding new routing and scheduling plan to optimality using a branch and bound heuristic. The authors model passenger delays explicitly but they assume that all passenger itineraries contain only a single flight leg. Given the large number of possible routings for even modest sized problems, it is doubtful that their approach could be materialized for practical problems. On the other hand due to the fact that companies manage their operations using hub and spoke flights, this study would also have limited scope of application.\\
+\citep{Jarrah1993} present an overview of a decision support system for the aircraft recovery problem with the attempt of conceptualizing the problem. The authors used a minimum cost network models, one delay model and one cancellation model and implemented an algorithm that solves the shortest path problem repeatedly in order to determine the necessary flows. One of the major drawbacks of this work consists of not having solutions that combine both flight delay and cancellation.
+\citep{Yan1997} developed a framework to help carriers handle schedule perturbation, due to temporary closure of airports, and resume their normal services as possible. This framework is based in a time-space network flow model, where the arcs in the network represent airborne flights, grounded flights and overnight connections. The research was conducted over a set of scenarios, mathematically formulated either as pure network flow problems or network flow problems with side constraints, the former solved using simplex method and the latter using a Lagrangian relaxation-base algorithm, respectively. These models minimize the schedule-perturbed time after incidents so that carriers can resume their normal services as soon as possible in order to maintain their levels of service. The salient features of the models consist in combining systematically flight cancellations, flight delays, the modification of multi-stop flights, the ferrying of idle aircraft and the swapping of aircraft. This procedure aims at adjusting effectively a schedule following incidents, so that a carrier can maintain its profitability.  The authors confine scope of this research to the operations of a single fleet as well as simplifying multi-leg flights by considering the that time block is from the beginning of the first leg to the end of the last leg.\\
+\citep{Cao1997-I} and \citep{Cao1997-II} extended the work developed by \cite{Jarrah1993} evaluating solutions with flight cancellations and delays. The authors used a linear programming approximation algorithm based on   a quadratic programming model that included both flight delays and cancellations. One of the major limitation of this work relates to the approach being limited to aircraft assigned to routes containing at most two flight legs.\\
+The research led by \citep{Arguello1997} used a greedy randomized adaptive search procedure (GRASP) meta-heuristic to minimize flight cancellation and delay costs associated with a recovery aircraft routing, as a response to groundings and delays. The GRASP described in the study is adapted for use as a randomized neighborhood search technique. In the procedure, the neighbors of an addressed solution are evaluated, and the most desirable are placed on a restructured candidate list. Neighbor generation operations are performed on pairs of aircraft routes. The authors introduced a series of constraints to enforce the model to share operational practices namely that, every flight in each aircraft route must depart from the airport where its previous flight arrived (balance constraint), a minimum turn-round time must be enforced between each flight arrival and subsequent departure, the recovery period extends to the end of the current day, aircraft must be positioned at the end of the recovery period in a specific airport so that the flight schedule can be resumed next day, airport departures are restricted in the curfew period and aircraft with planned maintenance will not have their original route altered. The approach was tested on data supplied by $Continental$ $Airlines$ and the results proved that  the GRASP can produce in  most cases optimal or near-optimal solutions.\\
+\citep{THENGVALL2000} 2000) solves the aircraft recovery problem for a single fleet over the the entire flight schedule with an objective function that accounts for flight revenues, delays, cancellations and also an incentive to minimize deviations from the original schedule. The objective function consists in minimizing total operating costs, but crew and passenger disruptions are not considered. The problem is modeled using a time-space network and solved as an integer linear program using an optimization software.  To  represent the delays for a particular flight leg, a series  of delay arcs are introduced to consider the available options for later flights.  To  ensure   that only a single flight is chosen, a side constraint must be added requiring that the sum   for all arcs representing the same flight is less or equal to one. The model was able to accommodate recovery periods of arbitrary length that begin and end at arbitrary periods of the day. In addition, a rounding heuristic is introduced to obtain feasible integer solutions from the linear programming relaxation of the mixed-integer programming formulation. As mentioned by the authors one weakness of the model is that it does not track individual passengers and thus does not consider passenger connections. As for aircraft maintenance requisites the authors chose to remove aircraft due for maintenance from delays or cancellations to assure they reach their proper destination. This work was extended in \citep{Thengvall2001} by solving the multi-fleet aircraft schedule recovery, using multi-commodity network-type models during a hub closure.\\
+\citep{Love2001} defined the dedicated aircraft recovery problem (DARP) as \textit{given an original flight schedule and one or more disruptions, the DARP consists of changing  the flight assignments of the aircrafts in order to produce a feasible and more preferable revised flight schedule}”. The authors compared the results obtained using various versions of a heuristic, namely the iterated local search (ILS) with variable neighborhood search (VNS) incorporated and a simple steepest ascent local search (SALS) along with a repeated steepest ascent local search (RSALS), which performs entirely like SALS but is repeated for different initial conditions. \hl{According to the authors ILS algorithms were able to find solutions within the first 10 second, that prove to be robust. After 24-hour test runs, significantly better solutions were not found.} As for the SALS the authors mention that the algorithm finds quickly a local optimum and that once reached it is not easy to escape from. The latter proved not being a drawback when the local optimum is close to the value of the global optimum which was confirmed as being the case. Since the results achieved were very auspicious $British$ $Airways$ (BA), provided some of their flight data for realistic testing of the RSALS heuristic. After a few simplifications 10 BA flight schedules were extracted, that had an average of 80 active aircraft, 44 airports and 340 flights. Each flight schedule was disrupted and afterwards the RSALS heuristic was used to improve the flight schedules by delaying flights, swapping aircraft and cancelling flights.  The model proved to deliver reasonable good recovered flight schedules, by solving a SALS heuristic using the subjacent network representation of the problem. The authors conclude that further advancements should be performed to include crew scheduling and passenger itineraries.   As for the initial claim made by the authors that the time for a tool to find solutions for such problem, should be less that three minutes, \citep{Andersson:2006} refers that this benchmark varies depending on the envelopment of the problem, and also on quality of the solutions delivered.
+In \citep{Andersson:2006} tabu search (TS) and simulated annealing (SA) methods were used to solve the aircraft schedule recovery problem. After evaluating the quality of the solutions and the robustness of the method TS proved to be the preferable solution strategy.
+%%%%%%%%%%%%%%%%%%%%%%%%
+%Recent lit. rev.
+%%%%%%%%%%%%%%%%%%%%%%%%
+\hl{Due to market deregulation, airlines started conceiving optimal flight schedules, with little slack capable to accommodate irregularities in the operations.} \citep{Kohl2007149} \hl{discussed a system spanning multiple resources method integrating data sources. The authors claim the system improved the quality of decision-making by providing flexible tools that could add value to the business process of operations control at various airlines.}\\
+\hl{An ulterior method used linear a programming model to improve robustness of aircraft schedules through flight re-timing and subject to a fixed aircraft routing to improve the solution's quality has been proposed by} \citep{AhmadBeygi2010}. \hl{As an objective function, they considered the sum of the impacts of each individual primary delay (selected out of a discrete set of possible delay values) as it propagates downstream, weighting these delays by their relative probabilities.}
+\hl{To make aircraft routes less vulnerable to disruptions} \cite{Aloulou2013} \hl{developed a model that  distributed slacks to connections where they are most needed operationally. To meet this end, the model assigns legs to aircraft and determines the flights departure times, while maintaining the designated time-slot assignments at airports,and satisfying operational constraints.}
+\hl{To find solutions for flight schedules subject to random delays} \citep{Ahmed2017} \hl{used a hybrid optimization-simulation approach based on a mixed-integer non-linear programming model for the robust weekly aircraft maintenance routing problem. The recovery problem is solved with a full set of recovery options, including aircraft re-routing and flight delays and cancellations. In the event of a disruption, the aircraft routes in the planning stage solution may not be feasible for the disrupted flight schedules, forcing the creation of new routes. These new routes have to comply with the origin and destination locations and also maintenance requirements. To improve the tractability and reduce solution runtime the authors used column generation and Benders' decomposition. The authors claim that on-time performance was improved and, the cumulative delays and passenger were reduced.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%Integrated Recovery
+%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Integrated Recovery}\label{sec:integratedRecovery}
+
+When scheduling flights, passenger travel demand is clearly a key consideration for commercial airlines. The efficient flow of passengers is critical, especially when regular operations are affected by disruptions, however in practice, passenger recovery is observed as the last stage of the sequential recovery approach. Due to the high dependency of passenger schedules on aircraft and crew schedules, passenger recovery is either integrated with aircraft recovery or with both aircraft and crew recovery.\\
+In \citep{Bratu2006} the authors focus on passenger recovery while incorporating rules and regulations on aircraft and crew. They propose models for integrated recovery, using a flight schedule network representing flight legs with flight arcs. Several copies of the flight arcs are made to account for each possible departure time decision within the window of feasible departures for a specific flight. Making copies of arcs to represent flight leg departure decisions has been widely used in previous schedule recovery problems \citep{Yan1997}, \citep{THENGVALL2000} and \citep{Thengvall2001}. The objective either minimizes the sum of operating costs and disrupted passenger costs, or the sum of operating costs and total passenger delay costs. To test the models the authors developed an $Airline$ $Control$ $Center$ $Simulator$, to simulate domestic operations of a major $United$ $States$ airline. The airline's data consisted of 83,869 passengers on 9,925 different passengers' itineraries per day, operated by 302 aircrafts divided into 4 fleets, 74 airports and 3 hubs. For all scenarios solutions are generated that resulted in reductions in passenger delay and disruptions.\\
+The ROADEF 2009 Challenge introduced a competition that intended to obtain a recovery plan that was able to integrate schedule, aircraft, and passengers. In the context of the ROADEF 2009 Challenge, different algorithms, have been proposed.\\
+\citep{bisaillon2011} proposed a very efficient large neighborhood search model consisting in three phases, construction, repair and improvement, respectively. The construction phase consists of constructive heuristic that tries to create feasible solutions, by removing flight sequences until all constraints, with the possible exception of airport capacity constraints, are satisfied.  The repair phase makes use of a heuristic that proceeds in three steps. First, by delaying flights to respect all airport capacity constraints. Second, by re-inserting flights that were removed during the construction phase, between two successive flights whose time interval is long enough to accommodate them. The authors argument that this approach yields expressive cost improvements in few iterations. Third, by accommodating passengers whose itineraries have been canceled by repeatedly solving shortest path problems for a network of flights. The source node represents the origin airport of the itinerary at the departure time and the sink node represents the destination airport of the itinerary at the arrival time. This process attempts to assign to the path the largest number of passengers satisfying the aircraft seating capacity and is iterated as long as new passenger can be accommodated.
+Although the solutions obtained are feasible, they possibly are sub-optimal since many itineraries may have been cancelled. The improvement phase consists of a procedure that attempts to extend the repair phase by delaying some flights in the hope of accommodating additional passengers. Just like in the repair phase passengers are re-assigned by repeatedly solving shortest path problems.
+The global process is iterated introducing diversification in the construction phase, by randomly sorting the aircraft so as to treat them in a different order each time the construction phase is performed. Finally, whenever improved cost is found, the corresponding solution replaces the current one.
+On the overall, the algorithm executes a very large number of simple and fast actions. By doing so, not only it finds quickly feasible solutions, but also does not rely on any knowledge of the current flight network.\\
+\citep{Mansi2012} presented a model that combines a math-heuristic with an oscillation heuristic to improve the solutions obtained. The math-heuristic consists of mixed integer programs that intends to maximize the number of aircraft that satisfy the maintenance constraint and the number of passengers that arrive at their final destination while minimizing the total delay. However this procedure, may not render a feasible solution, meaning that at least one aircraft will not be able to reach the airport assigned for maintenance on time without cancelling flights. To make the solution feasible, a repair heuristic is applied to try to satisfy hard maintenance constraints, and also to maximize the number of passengers arriving at destination. After generating a feasible solution the algorithm makes improvements alternating between constructive and destructive phases, by adding or removing some parts of the aircraft routes.\\
+\citep{acuna2009} addresses the \textit{Disruption Management for Commercial Aviation} problem using a mixed integer programming formulation that integrates two multi-commodity flow problems. The first one regards to aircraft flowing through airports, and the second one to passengers flowing through flights. Due to its complexity the authors choose to solve the problem using statistical analysis of propagation of incidents (SAPI). This method assumes that every schedule event could be affected (or not) by some disruption with a certain probability, hence the goal of using (SAPI) is to determine the probability that a flight has of being cancelled in the optimal solution. Afterwards it is possible to divide the flights in two sets: flights expected to be cancelled, and the remaining flights. The idea is to study the probability that disruptions affect future flights, and use this information to intensify search in the affected areas while the rest is kept unperturbed. The second one consists of a post-optimization procedure designed to improve the solutions obtained, by assigning cancelled passenger to flights that can accommodate them.\\
+\citep{jozefowiez2013} presented a three-phase heuristic, which the authors designated by new connections and flights. During the first phase, after the disruptions are integrated in the system, the heuristic algorithm to searches for feasible solutions, by means of cancelling or truncating itineraries to respect rotation connectivity or airport capacities. In the second phase the goal consists in reassigning to the existing set of rotations as many passenger groups as possible. The search for an itinerary for a given group of passengers is modeled as a shortest path problem. This procedure may cause some groups to be split in order to respect the aircraft seat capacities. In the third phase the algorithm tries to insert new sub-rotations to existing aircraft rotations to allow the transportation of passengers. Passenger re-accommodation is again based on shortest path solving on a time-space graph for each group of passengers. Although the results of this method, for smaller instances (data sets A and B respectively) look promising, the results proved intractable for larger instances (data sets X), because of the large number of variables and memory amount that was necessary.\\
+In \citep{eggermont2009} the authors decompose the problem into smaller and more tractable ones. The sub-problems are chained in the sense that each one attempts to improve a certain aspect in the schedule, and its current output consists of the next sub-problem's input. The first considered sub-problem  attempts to fix aircraft rotation by cancelling for an unavailable aircraft all remaining flights originally scheduled within its unavailability period. The second considered sub-problem takes as input the solution of the first sub-problem and aims at respecting airport capacities. However while respecting airport capacities, maintenance might not be carried out. In order to fix this the pre-maintenance rotations are scheduled first. The third solved sub-problem lies in delay fine tuning. Additional delays may allow for more passengers to be re-accommodated. Finally in the fourth problem, since many itineraries become infeasible, passengers are re-routed using the cheapest feasible alternative routes where there is available capacity in the operated flights.\\
+In \citep{darlay2009} the authors proposed a heuristic that alternates between an aircraft rotations construction phase and a passenger reassignment phase. For the first phase, aircraft allocation is solved via a minimum cost multi-flow in a time-space network with additional constraints modelling airport capacities and aircraft shortages or maintenance. In the second phase, a set of possible paths is created for each of the passenger's itineraries. Every path has an associated cost that accounts for delaying and cabin class downgrading. This phase is modelled using a capacitated multi-flow with a path formulation.\\
+In \citep{peekstok2009} the authors propose a simulated annealing method with a modified objective function to account for constraint violation. After the introduction of disruptions in the data sets corresponding to the original schedule, the authors choose to accept infeasible solutions by allowing constraint violation for airport hourly capacities for arrivals and departures, airport connectivity, aircraft minimum transit and turn-round time, aircraft maintenance periods, aircraft seating capacity, minimum passenger connection time and passenger schedule. The authors showed a preference for this procedure since in their opinion, restricting the local search to feasible solutions would not render good results. During testing of the data instances the authors found that it is harder to fix airport and aircraft constraints than passenger constraints. Therefore after achieving airport and aircraft feasibility, the algorithm does not allow to violate them again. The algorithm then iterates between attempting to lower the objective function and attempting to reach zero passenger constraint violation, by using a local search that changes flight time, operating aircraft of an existing flight or the flight of a passenger’s itinerary.\\
+\citep{dickson2009} proposes a two phase process. The first phase uses a mixed integer linear integer program connection network that aims to re-route aircraft, re-time and/or cancel flights so as to minimize the disruption experienced by passengers in their itineraries. The second phase uses a network multi-commodity network flow model to re-optimize passenger itineraries base on the flight schedule determined in phase in the first phase. The goal is to maximize the value of the itineraries flowing through the flight network, within the given flight capacity and passenger demand.\\
+\citep{eggenberg2009} address the problem proposing a modelling framework that allows the consideration of operational constraints within column generation. The authors approach the problem modelling the aircraft recovery problem (ARP) with the passenger recovery problem (PRP). For the ARP each recovery scheme has a cost, which can be uniquely determined by operational and delay costs, and is associated with a binary variable that is equal to one if it is considered in the solution, or zero otherwise. A recovery scheme is described using binary coefficients to depict if a route covers a  certain flight, a route reaches a certain final state and if a route is assigned to certain aircraft. The input of the PRP is the output of the ARP, $i.e.$ a feasible recovery plan; the objective is to operate the maximal number of passengers to their final destination while minimizing the total delay and cancelling costs.
+
+
+%\subsection{Flight Speed Control}
+%\input{flightSpeed.tex}
+
+
+\section{The Model for the Aircraft Recovery Problem}\label{sec:modelARP}
+The ARP can be defined as the problem of modifying the aircraft rotation to compensate the presence of disruptions during operations that make the rotation infeasible. The strategy to overcome the disruptions, can only be implemented in a time window designated by recovery time window (RTW).\\
+	 We will use the ROADEF 2009 Challenge data set to validate the CHARP. This data set has thirty two data instances which have the files that will be used in our model. \hl{In the following subsections we will describe each of the files, namely in Subsection } \ref{subsec:airports} \textit{airports.csv}, \hl{in Subsection} \ref{subsec:distance} \textit{dist.csv}, \hl{in Subsection} \ref{subsec:aicraft}, \hl{in Subsection} \ref{subsec:flightsRotations} \textit{flights.csv} and \textit{rotations.csv}, \hl{in Subsection} \ref{subsec:flightDisr} \textit{alt\_flight.csv}, \hl{in Subsection} \ref{subsec:aircraftDisr} \textit{alt\_aircraft.csv}, \hl{and in Subsection} \ref{subsec:airportDisr} \textit{alt\_airport.csv}. Finally in Section \ref{sec:aircConstraints} we will describe the constraint that aircraft are subject to.
+	 
+
+
+
+
+\subsection{Airports} \label{subsec:airports}
+
+The key infrastructure in commercial aviation consists of airports. In this problem, they have also an essential role since their capacity consists of a hard constraint that bounds the maximum number of arrivals and departures per hour.
+The airports form a set $A$. For each $a \in A$ and for each window $ h \subseteq RTW $, the value $ c_a^{lh}$ is the maximum number of arrivals that can occur during the time window $h$ at airport $a$ and $c_a^{th}$ the maximum  number of departures. It is necessary to discretize these hourly capacities to incorporate them within the model's formulation. For example, the recovery time window between $ [\text{12:00}, 16:00[ $ comprises four unit time windows, and as an illustration, if the departure capacity of an airport between $\left[ 14:00, 15:00 \right[$ is equal to $3$, this indicates there can be at most three flights departing form this airport between 14:00 and 14:59.\\
+The data file $airports.csv$ provides the departure and arrival airport capacities, which correspond to a maximum number of operations allowed per one-hour interval, for a typical day. These thresholds depend upon the time of day (peak time, normal time, night time, possible curfew). Each line of the file contains the three-letter code of the airport (type “airport”) followed by a series of quadruples specifying the capacities associated with each time period. Capacities are
+nonnegative integers and the time periods are characterized by two entries of type “time” corresponding to the start time and end time of the period $e.g.$:\\
+\newline
+{\texttt{\footnotesize NCE 0 0 00:00 03:00 5 0 03:00 07:00 20 20 07:00 19:00 5 10 19:00 21:00 0 0 21:00 00:00}}
+\newline
+\newline
+The above example describes a typical day (in GMT) for Nice airport:
+\begin{itemize}
+	\item  neither departures nor arrivals between 21:00 and 3:00
+	\item  maximum five departures per one-hour interval [H, H + 1[ between 3:00 and 7:00 (and no arrivals)
+	\item  maximum 20 departures and 20 arrivals per one-hour interval [H, H + 1[ between 7:00 and 19:00
+	\item  maximum five departures and 10 arrivals per one-hour interval [H, H + 1[ between 19:00 and 21:00
+\end{itemize}
+
+
+For simplicity, some real constraints are not taken into account in the problem ($e. g.$ the maximum number of aircraft in the airport surface).
+
+\subsection{Distance between airports} \label{subsec:distance}
+
+For each airport pair $a_1, a_2  \in  A $, $d_{a_1 a_2}$ is the distance measured in flight minutes between $a_1$ and $a_2$.
+The $dist.csv$ provides the typical flight times between each airport pair, as well as the flight type. Note that, for a given airport pair, the flight times may depend on the direction of the flight. Each line of the file contains the three-letter codes of the origin and destination airports, the flight time and the flight type $e.g.$: \\
+\newline
+{\texttt{\footnotesize CDG NCE 95 D}}
+\newline
+{\texttt{\footnotesize NCE CDG 95 D}}
+\newline
+\newline
+The above example provides the flight times between Nice airport and Paris-Charles de Gaulle (95 minutes in both directions) and specifies that the flight is domestic.
+
+\subsection{Aircraft} \label{subsec:aicraft}
+
+Let P denote the set of aircraft, where each aircraft $p \in  P$ has the following set of operational characteristics:\\
+\begin{itemize}
+	\item aircraft type: it defines the family, model and configuration; subsets of aircraft with common characteristics are grouped within families (\textit{e. g., A318, A319, A320,} and \textit{A321} in the \textit{$Airbus Small$} family). Operational characteristics are common to all aircraft of a given model: turn-round time, transit time, range, and set of possible configurations. The configuration provides the number of seats for each cabin class, economic ($E$), business ($B$) and first ($F$).
+	
+	\item transit time: corresponds to the minimum time between the arrival and departure of multi-leg flight operated by the same aircraft. The advantage of this configuration is that it allows for a reduction in the time necessary to prepare the aircraft for the second leg.
+	
+	\item turn-round time: defines the minimum idle time between two different consecutive flights operated by the same aircraft;
+	\item maintenance: an aircraft needs to undergo scheduled maintenance on a specified airport during a period of time, in which it is unavailable for flight duty, and a maximum allowable flying range before the maintenance is due. 
+\end{itemize}
+
+The $aircraft.csv$ file provides the aircraft characteristics $e.g.$:\\
+\newline
+{\texttt{\footnotesize A320\#1 A320 AirbusSmall 0/20/150 480 1500.0 30 30 CDG CDG–10/01/08–14:00–10/01/08–20:00–900 }}
+{\texttt{\footnotesize A320\#2 A320 AirbusSmall 10/30/110 480 1500.0 30 30 NCE NULL}}
+\newline
+{\texttt{\footnotesize TranspCom\#1 TranspCom TranspCom -1/-1/-1 60 0.0 5 5 CDG NULL}}
+\newline
+{\texttt{\footnotesize TranspCom\#2 TranspCom TranspCom -1/-1/-1 60 0.0 10 10 ORY NULL}}
+\newline
+
+The above example provides the characteristics of the first two Airbus A320s in the fleet. Note that they have several common characteristics, but their configurations are different. The first one is located in Paris-Charles de Gaulle at the beginning of the recovery period, and must undergo maintenance there on 10/01/08 between 14:00 and 20:00 (it cannot fly more than 15 hours between two consecutive maintenance actions). The second one is located in Nice and has no planned
+maintenance until the end of the recovery period. The remining two consist of surface transportation vehicles 1 and 2. Both of them belong to the family TranspCom, have infinite seating capacities, and operating costs of zero. Vehicle 1 is located in in Paris-Charles de Gaulle at the beginning of the period, whereas vehicle 2 is in Paris-Orly.
+
+\subsection{Flights and rotations} \label{subsec:flightsRotations}
+
+An aircraft performs a rotation which is a sequence $ \sigma_p$ of flight legs starting from an origin airport $O_p$. The $i^{th}$ flight leg in the rotation $ \sigma_p(i)$ is defined as direct flight connecting an origin $ \sigma^o_p(i)$  to a destination airport $ \sigma^f_p(i)$  without any stop in between. Each flight is also characterized by a scheduled departure time $ \sigma^d_p(i)$  and an arrival time $ \sigma^a_p(i)$. A rotation can be extended for several days and the alterations can be made only on the part of the rotation $ \sigma_p$ of an aircraft $p$ taking place during the recovery time window.\\
+
+The $flight.csv$ file provides information regarding the flights operated by the airline on a typical day of the recovery period. For each flight, the following data is provided: unique identification number (strictly positive integer), origin and destination airports, departure and arrival times, and the flight number of the preceding leg (strictly positive in the case of multi-leg flights, 0 otherwise) $e.g.$:\\
+\newline
+{\texttt{\footnotesize 1 NCE CDG 14:00 15:35 0}}
+\newline
+{\texttt{\footnotesize 2 SIN LHR 15:20 05:30+1 0}}
+\newline
+{\texttt{\footnotesize 3 LHR CDG 06:30 07:45 2}}
+\newline
+{\texttt{\footnotesize 4 ORY CDG 08:30 09:00 0}}
+\newline
+
+The above example describes flight number 1 (domestic, see file dist.csv), leaving from Nice at 14:00 GMT and arriving at Paris-Charles de Gaulle at 15:35 GMT. It also describes the multi-leg flight from Singapore to Paris-Charles de Gaulle via London Heathrow, composed of flights numbered 2 and 3. The first leg (intercontinental) leaves from Singapore at 15:20 GMT and arrives at London Heathrow at 5:30 GMT the following day; the second flight (continental) departs London-Heathrow at 6:30 GMT and arrives in Paris at 7:45 GMT. The last line describes flight number 4 (proximity) from Paris-Orly to Paris-Charles de Gaulle, corresponding to a surface transportation “flight”.
+
+The $rotation.csv $ file describes rotations for all aircraft throughout the recovery period. Each flight is uniquely defined by a flight number (strictly positive integer) and a departure date. The aircraft operating the flight is also provided (type “aircraft”). The lines are grouped by aircraft and sorted chronologically for each aircraft $e.g.$:\\
+\newline
+{\texttt{\footnotesize 2 20/01/08 B747\#5}}
+\newline
+{\texttt{\footnotesize 3 21/01/08 B747\#5}}
+\newline
+{\texttt{\footnotesize 2 21/01/08 A340\#2}}
+\newline
+{\texttt{\footnotesize 3 22/01/08 A340\#2}}
+\newline
+{\texttt{\footnotesize 4 21/01/08 TranspCom\#2}}
+\newline
+
+The above example describes the rotations of the Boeing 747 number 5, the Airbus A340 number 2, and the surface vehicle number 4 throughout the recovery period, which is from 20/01/08 to 21/01/08. These rotations consist of flights number 2 and 3 (multi-leg flights from Singapore to Paris-Charles de Gaulle) on 20/01 and 21/01, and of the surface trip from Paris-Orly to Paris-Charles de Gaulle on 21/01, respectively. Note that flight number 3 on 22/01 is not within the recovery period; however, since this flight is linked to a flight within the recovery period (flight number 2 on 21/01), it is included in the problem.
+
+\subsection{Flight disruptions} \label{subsec:flightDisr}
+
+
+	Flight disruptions, consists of multiple flight delays or cancellations. The set of flight delays $ \mathcal{D} $ is such that each delay $ d \in \mathcal{D}$ can be defined by a triplet $\langle p, i, t \rangle \in P \times \mathbb{N}^{+}  \times \mathbb{N}^{+}$ with $p$ the affected aircraft, $i$ the index of the affected leg in $ \sigma_p$, and $t$ the delay in minutes. The set of flight cancellations is defined by a couple $\langle p,i \rangle \in  P \times \mathbb{N}^{+}$ with $p$ the affected aircraft and $i$ the index of the affected leg in $ \sigma_p$.
+	The $alt\_flight.csv$ file provides the disruptions happening to flights operated by the considered airline, namely delays and cancellations. Each impacted flight is uniquely identified by a flight number and a departure date. Information about the disruption is also provided: the length of the delay in case of delay, and -1 in
+	case of cancellation $e.g.$:\\
+	\newline
+	{\texttt{\footnotesize 2 20/01/08 45}}
+	\newline
+	{\texttt{\footnotesize 1 21/01/08 -1}}
+	\newline
+	
+	The above example specifies a delay of 45 minutes on flight number 2 (Singapore-London Heathrow) on 20/01/08 and the cancellation of flight number 1 (Nice to Paris-Charles de Gaulle) on 21/01/08.
+	Flights mentioned in this file, as well as passengers travelling on them, must be taken into account for the calculation of costs in the objective function.
+	
+\subsection{Aircraft disruptions} \label{subsec:aircraftDisr}
+
+	Aircraft disruptions, results in unavailability during a certain period due to mechanical failures or maintenance constraints. The set of aircraft disruptions $\mathcal{B}$ is such that each aircraft disruption $b \in \mathcal{B}$ forms a triplet $\langle p, s, e \rangle  \in P \times \mathbb{N}^{+} \times \mathbb{N}^{+}$ with $p$ the affected aircraft, $s$ the start of the aircraft's period of unavailability and e the end time of the aircraft's unavailability period.
+	The $alt\_aircraft.csv$ file provides the periods of unavailability of aircraft. Each line contains the aircraft ID of the unavailable aircraft, the date and 	time  of the beginning of the period of unavailability, and the date and time of the end of the period of unavailability $e.g.$:\\
+	\newline
+	{\texttt{\footnotesize A320\#1 20/01/08 04:00 20/01/08 20:00}}
+	\newline
+	
+	The above example mentions that the Airbus A320 number 1 will not be available between 4:00 and 20:00 on 20/01/08.
+	
+\subsection{Airport disruptions} \label{subsec:airportDisr}
+Airport disruptions results in capacity reduction in the number of departures or arrivals per hour, caused by inclement weather or industrial action. The set of airport capacity reductions $\mathcal{R}$ is such that each reduction $ r \in \mathcal{R}$ is defined by a quadruplet $\langle a, h, z, c\rangle \in \mathcal{A} \times RTW \times {\{t, l\}} \times \mathbb{N}^{+}$  with $a$ the affected airport, $h$ the time window during which the capacity reduction occurs, $z$ the affected activity (departure or arrival), and $c$ the new capacity. 
+	The $alt\_airport.csv$ file provides the periods of temporary reductions in airport capacities.Each line contains the three-letter code of the airport where the reduction occurs, the date and time of the start of the period of reduction, the date and time of the end of the period of reduction, and the applicable departure and arrival 	capacities during the period of reduction. The capacities are non-negative integers $e.g.$:\\
+	\newline
+	{\texttt{\footnotesize LHR 20/01/08 04:00 20/01/08 10:00 0 2}}
+	\newline
+	
+	The above example corresponds to dense fog in London: no departures and only two arrivals are allowed per one-hour interval [H, H + 1[ from 4:00 to 10:00.		
+
+\subsection{Aircraft Constraints} \label{sec:aircConstraints}
+
+Since this model is a simplification of the real problem neither crew scheduling or passenger re-accommodation will be considered. However, an aircraft change can only be done within the same family of aircraft.
+
+\subsubsection{Rotation continuity}
+
+A rotation $ \sigma_p$ starting  at the origin airport  $ \sigma^o_p(1) = O_p$, must be connected. In expression \ref{exp:rotationContinuity} \hl{we have, in the interval from the first flight to the open end of the rotation size, the arrival airport of the current flight equals the departing airport of the next flight:}
+
+\begin{equation}
+	\label{exp:rotationContinuity}
+	\forall i \in \left[1, |\sigma|\right[, \sigma^f_p(i) = \sigma^o_p(i+1)
+\end{equation}
+
+$ |\sigma| $ being the number of flights in the rotation
+
+\subsubsection{Turn-round time}
+
+The aircraft $p$ must respect the turn-round duration  $t_r$ between the consecutive legs:
+
+\begin{equation}
+	\label{exp:turnroundtime}
+	\forall i \in \left[1, |\sigma_p|\right[, \sigma^a_p(i) + t_{rp} \leq \sigma^d_p(i+1)
+\end{equation}
+
+
+The same applies for transit time between multi leg flights.
+
+\subsubsection{Maintenance}
+The maintenance constraints are hard constraints. For a subset $P_m \subset P$, each aircraft $p \in P_m$ must undergo maintenance in a certain airport during a period of time.
+
+\section{The Constructive Heuristic for the Aircraft Recovery Problem}\label{sec:algorithms}
+
+\input{algorithms.tex}
+
+
+
+\input{compResults.tex}
+
+\section{Conclusions}\label{sec:conclusions}
+
+ARP is a practical problem that needs to be solved during operations, therefore, the efficiency of the method in terms of computational time is a very important characteristic. Most of the works in the literature reach computational times of less than thirty minutes, however it is important that this limit is possible for large instances, that is, those with more than 400 flights. These two objectives are achieved in a few publications, which shows that there is room for advances in research. One factor that facilitates these objectives is the greater availability of high-performance computing infrastructure in recent years. This is important so that companies can, in fact, enjoy the benefits promised by these methods. Otherwise, the professional practice of disruption recovery will continue to be done manually in the operational centres. 
+\hl{The CHARP proposed in this work seeks to achieve these two objectives. We were able to find solutions, in less than thirty minutes, for thirty two data sets with flight, aircraft and airport disruptions. These data sets vary in size comprising a number of flights from 608 to  2178, aircraft from 85 to 618 and airport from 35 to 168. For each of the data sets the CHARP loads the respective data, introduces the disruptions and if necessary allocates times slots for new flights. We then select a sub-rotation starting in infeasible flight and proceed to recover it. The recovery procedure is done using an upper or a lower heuristic depending on the size of the search space. The recovery procedure will afterwards try to reconnect the first part of the rotation with the recovered one and for this purpose, if necessary, create taxi flights. In the impossibility of the latter the algorithm will cancel the flights in the recovered rotation until the continuity constraint be satisfied.}
+
+
+
+% Appendix here
+% Options are (1) APPENDIX (with or without general title) or
+%             (2) APPENDICES (if it has more than one unrelated sections)
+% Outcomment the appropriate case if necessary
+%
+% \begin{APPENDIX}{<Title of the Appendix>}
+% \end{APPENDIX}
+%
+%   or
+%
+% \begin{APPENDICES}
+% \section{<Title of Section A>}
+% \section{<Title of Section B>}
+% etc
+% \end{APPENDICES}
+
+
+% Acknowledgments here
+\ACKNOWLEDGMENT{The authors gratefully acknowledge the existence of
+the Journal of Irreproducible Results and the support of the Society
+for the Preservation of Inane Research.}
+
+
+% References here (outcomment the appropriate case)
+
+% CASE 1: BiBTeX used to constantly update the references
+%   (while the paper is being written).
+\bibliographystyle{informs2014} % outcomment this and next line in Case 1
+\bibliography{myLibrary} % if more than one, comma separated
+
+% CASE 2: BiBTeX used to generate mypaper.bbl (to be further fine tuned)
+%\input{mypaper.bbl} % outcomment this line in Case 2
+
+%If you don't use BiBTex, you can manually itemize references as shown below.
+
+
+%\bibliographystyle{nonumber}
+%\bibliography{myLibrary}
+
+%%%%%%%%%%%%%%%%%
+\end{document}
+%%%%%%%%%%%%%%%%%
+

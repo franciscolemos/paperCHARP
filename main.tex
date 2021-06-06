@@ -63,7 +63,7 @@
 % Author's names for the running heads
 % Sample depending on the number of authors;
 % \RUNAUTHOR{Jones}
-\RUNAUTHOR{Slippery and Arinella}
+\RUNAUTHOR{de Lemos and Woodward}
 % \RUNAUTHOR{Jones, Miller, and Wilson}
 % \RUNAUTHOR{Jones et al.} % for four or more authors
 % Enter authors following the given pattern:
@@ -72,7 +72,7 @@
 % Title or shortened title suitable for running heads. Sample:
 % \RUNTITLE{Bundling Information Goods of Decreasing Value}
 % Enter the (shortened) title:
-\RUNTITLE{Tis a Butter Place}
+\RUNTITLE{A Constructive Heuristic for the Aircraft Recovery Problem}
 
 % Full title. Sample:
 % \TITLE{Bundling Information Goods of Decreasing Value}
@@ -378,8 +378,10 @@ The maintenance constraints are hard constraints. For a subset $P_m \subset P$, 
 
 \section{Conclusions}\label{sec:conclusions}
 
-ARP is a practical problem that needs to be solved during operations, therefore, the efficiency of the method in terms of computational time is a very important characteristic. Most of the works in the literature reach computational times of less than thirty minutes, however it is important that this limit is possible for large instances, that is, those with more than 400 flights. These two objectives are achieved in a few publications, which shows that there is room for advances in research. One factor that facilitates these objectives is the greater availability of high-performance computing infrastructure in recent years. This is important so that companies can, in fact, enjoy the benefits promised by these methods. Otherwise, the professional practice of disruption recovery will continue to be done manually in the operational centres. 
-The CHARP proposed in this work seeks to achieve these two objectives. We were able to find solutions, in less than thirty minutes, for thirty two data sets with flight, aircraft and airport disruptions. These data sets vary in size comprising a number of flights from 608 to  2178, aircraft from 85 to 618 and airport from 35 to 168. For each of the data sets the CHARP loads the respective data, introduces the disruptions and if necessary allocates times slots for new flights. We then select a sub-rotation starting in infeasible flight and proceed to recover it. The recovery procedure is done using an upper or a lower heuristic depending on the size of the search space. The recovery procedure will afterwards try to reconnect the first part of the rotation with the recovered one and for this purpose, if necessary, create taxi flights. In the impossibility of the latter the algorithm will cancel the flights in the recovered rotation until the continuity constraint be satisfied.
+ARP is a practical problem that needs to be solved during operations, therefore, the efficiency of the method in terms of computational time is a very important characteristic.
+The CHARP loads the respective data, introduces the disruptions and if necessary allocates times slots for new flights. We then select a sub-rotation starting in infeasible flight and proceed to recover it. The recovery procedure is done using an upper or a lower heuristic depending on the size of the search space. The recovery procedure will afterwards try to reconnect the first part of the rotation with the recovered one and for this purpose, if necessary, create taxi flights. In the impossibility of the latter the algorithm will cancel the flights in the recovered rotation until the continuity constraint be satisfied.The data instance vary in size comprising a number of flights from 608 to  2178, aircraft from 85 to 618 and airport from 35 to 168.
+ Most of the works in the literature reach computational times of less than thirty minutes, however it is important that this limit is possible for large instances, that is, those with more than 400 flights. In this work we achieve this goal with a novel heuristic based in Constraint Satisfaction Problems. One factor that facilitates these objectives is the greater availability of high-performance computing infrastructure. Our experiments were conducted in an Intel Xeon Gold CPU @ 2.3GHz box which allowed to run simultaneously 320 scenarios for every CHARP speed.
+We were able to find solutions, in less than 30 minutes, the best having a speed of 0.5 for a time window of 900 minutes. 
 
 
 

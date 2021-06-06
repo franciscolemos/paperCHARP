@@ -53,7 +53,8 @@ To study the impact of the pincer speed we define the set of incremental and dec
 		\end{tabular}
 	\end{table} 
 
-In figure \ref{fig:speed} we can observe that the minimum aggregate cost is obtained for speed 1 in the 960 minutes times window.	
+In figure \ref{fig:speed} we can observe that the minimum aggregate cost is obtained for speed 1 in the 960 minutes times window however the lowest maximum time is achieved for speed 0.5 and the 900 minutes time window. For the total amount of delay we observe that it increases with the time window and that the different speeds observe the same pattern of behaviour. In relation to the total number of flight cancellations we can observe that the values have a sharp decrease from 720 to 780 minutes, after which they stabilize between a minimum of 2083 at speed 1 for the 960 minutes time window  and a maximum of 2340 at speed 5 for the time window of 1200 minutes. We can conclude that the number of cancellations provides the solutions with the lowest cost, in fact this value is the same chose in \citep{bisaillon2011} for the Construction Phase algorithm. As for the number of new flights we can observe that they increase steadily with the size of the time window. Finally, in relation to the number of taxi flights other than a sharp decrease in value for the time window of 900 minutes, the remaining values distribute themselves between 195 at speed 4 for the 1200 minutes time window and 226 at speed 3 for the 1020 minutes time window.
+ 
 	\begin{figure}[h!]
 		\centering
 		\includegraphics[width=\textwidth]{figures/speed2x3.png}
@@ -61,10 +62,12 @@ In figure \ref{fig:speed} we can observe that the minimum aggregate cost is obta
 		\label{fig:speed}
 	\end{figure}
 
+To have a better understanding of the solution quality in figure \ref{fig:costTime} we draw the Pareto front considering the aggregate cost versus the maximum time for the different speeds and we conclude that increasing the speed generates lower quality solutions.
+
 	\begin{figure}[h!]
 		\centering
 		\includegraphics[width=\textwidth]{figures/costTime.png}
-		\caption[]{The Paretto Front}
+		\caption[]{The Pareto Front}
 		\label{fig:costTime}
 	\end{figure}
 

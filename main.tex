@@ -236,7 +236,7 @@ The above example describes a typical day (in GMT) for Nice airport:
 
 For simplicity, some real constraints are not taken into account in the problem ($e. g.$ the maximum number of aircraft in the airport surface).
 
-\subsection{Distance between airports} \label{subsec:distance}
+\subsection{Distance Between Airports} \label{subsec:distance}
 
 For each airport pair $a_1, a_2  \in  A $, $d_{a_1 a_2}$ is the distance measured in flight minutes between $a_1$ and $a_2$.
 The $dist.csv$ provides the typical flight times between each airport pair, as well as the flight type. Note that, for a given airport pair, the flight times may depend on the direction of the flight. Each line of the file contains the three-letter codes of the origin and destination airports, the flight time and the flight type $e.g.$: \\
@@ -271,9 +271,9 @@ The $aircraft.csv$ file provides the aircraft characteristics $e.g.$:\\
 \newline
 
 The above example provides the characteristics of the first two Airbus A320s in the fleet. Note that they have several common characteristics, but their configurations are different. The first one is located in Paris-Charles de Gaulle at the beginning of the recovery period, and must undergo maintenance there on 10/01/08 between 14:00 and 20:00 (it cannot fly more than 15 hours between two consecutive maintenance actions). The second one is located in Nice and has no planned
-maintenance until the end of the recovery period. The remining two consist of surface transportation vehicles 1 and 2. Both of them belong to the family TranspCom, have infinite seating capacities, and operating costs of zero. Vehicle 1 is located in in Paris-Charles de Gaulle at the beginning of the period, whereas vehicle 2 is in Paris-Orly.
+maintenance until the end of the recovery period. The remaining two consist of surface transportation vehicles 1 and 2. Both of them belong to the family TranspCom, have infinite seating capacities, and operating costs of zero. Vehicle 1 is located in in Paris-Charles de Gaulle at the beginning of the period, whereas vehicle 2 is in Paris-Orly.
 
-\subsection{Flights and rotations} \label{subsec:flightsRotations}
+\subsection{Flights and Rotations} \label{subsec:flightsRotations}
 
 An aircraft performs a rotation which is a sequence $ \sigma_p$ of flight legs starting from an origin airport $O_p$. The $i^{th}$ flight leg in the rotation $ \sigma_p(i)$ is defined as direct flight connecting an origin $ \sigma^o_p(i)$  to a destination airport $ \sigma^f_p(i)$  without any stop in between. Each flight is also characterized by a scheduled departure time $ \sigma^d_p(i)$  and an arrival time $ \sigma^a_p(i)$. A rotation can be extended for several days and the alterations can be made only on the part of the rotation $ \sigma_p$ of an aircraft $p$ taking place during the recovery time window.\\
 
@@ -305,7 +305,7 @@ The $rotation.csv $ file describes rotations for all aircraft throughout the rec
 
 The above example describes the rotations of the Boeing 747 number 5, the Airbus A340 number 2, and the surface vehicle number 4 throughout the recovery period, which is from 20/01/08 to 21/01/08. These rotations consist of flights number 2 and 3 (multi-leg flights from Singapore to Paris-Charles de Gaulle) on 20/01 and 21/01, and of the surface trip from Paris-Orly to Paris-Charles de Gaulle on 21/01, respectively. Note that flight number 3 on 22/01 is not within the recovery period; however, since this flight is linked to a flight within the recovery period (flight number 2 on 21/01), it is included in the problem.
 
-\subsection{Flight disruptions} \label{subsec:flightDisr}
+\subsection{Flight Disruptions} \label{subsec:flightDisr}
 
 
 	Flight disruptions, consists of multiple flight delays or cancellations. The set of flight delays $ \mathcal{D} $ is such that each delay $ d \in \mathcal{D}$ can be defined by a triplet $\langle p, i, t \rangle \in P \times \mathbb{N}^{+}  \times \mathbb{N}^{+}$ with $p$ the affected aircraft, $i$ the index of the affected leg in $ \sigma_p$, and $t$ the delay in minutes. The set of flight cancellations is defined by a couple $\langle p,i \rangle \in  P \times \mathbb{N}^{+}$ with $p$ the affected aircraft and $i$ the index of the affected leg in $ \sigma_p$.
@@ -320,7 +320,7 @@ The above example describes the rotations of the Boeing 747 number 5, the Airbus
 	The above example specifies a delay of 45 minutes on flight number 2 (Singapore-London Heathrow) on 20/01/08 and the cancellation of flight number 1 (Nice to Paris-Charles de Gaulle) on 21/01/08.
 	Flights mentioned in this file, as well as passengers travelling on them, must be taken into account for the calculation of costs in the objective function.
 	
-\subsection{Aircraft disruptions} \label{subsec:aircraftDisr}
+\subsection{Aircraft Disruptions} \label{subsec:aircraftDisr}
 
 	Aircraft disruptions, results in unavailability during a certain period due to mechanical failures or maintenance constraints. The set of aircraft disruptions $\mathcal{B}$ is such that each aircraft disruption $b \in \mathcal{B}$ forms a triplet $\langle p, s, e \rangle  \in P \times \mathbb{N}^{+} \times \mathbb{N}^{+}$ with $p$ the affected aircraft, $s$ the start of the aircraft's period of unavailability and e the end time of the aircraft's unavailability period.
 	The $alt\_aircraft.csv$ file provides the periods of unavailability of aircraft. Each line contains the aircraft ID of the unavailable aircraft, the date and 	time  of the beginning of the period of unavailability, and the date and time of the end of the period of unavailability $e.g.$:\\
@@ -330,7 +330,7 @@ The above example describes the rotations of the Boeing 747 number 5, the Airbus
 	
 	The above example mentions that the Airbus A320 number 1 will not be available between 4:00 and 20:00 on 20/01/08.
 	
-\subsection{Airport disruptions} \label{subsec:airportDisr}
+\subsection{Airport Disruptions} \label{subsec:airportDisr}
 Airport disruptions results in capacity reduction in the number of departures or arrivals per hour, caused by inclement weather or industrial action. The set of airport capacity reductions $\mathcal{R}$ is such that each reduction $ r \in \mathcal{R}$ is defined by a quadruplet $\langle a, h, z, c\rangle \in \mathcal{A} \times RTW \times {\{t, l\}} \times \mathbb{N}^{+}$  with $a$ the affected airport, $h$ the time window during which the capacity reduction occurs, $z$ the affected activity (departure or arrival), and $c$ the new capacity. 
 	The $alt\_airport.csv$ file provides the periods of temporary reductions in airport capacities.Each line contains the three-letter code of the airport where the reduction occurs, the date and time of the start of the period of reduction, the date and time of the end of the period of reduction, and the applicable departure and arrival 	capacities during the period of reduction. The capacities are non-negative integers $e.g.$:\\
 	\newline
@@ -354,7 +354,7 @@ A rotation $ \sigma_p$ starting  at the origin airport  $ \sigma^o_p(1) = O_p$, 
 
 $ |\sigma| $ being the number of flights in the rotation
 
-\subsubsection{Turn-round time}
+\subsubsection{Turn-round Time}
 
 The aircraft $p$ must respect the turn-round duration  $t_r$ between the consecutive legs:
 
@@ -373,14 +373,13 @@ The maintenance constraints are hard constraints. For a subset $P_m \subset P$, 
 
 \input{algorithms.tex}
 
-
-
 \input{compResults.tex}
+
 
 \section{Conclusions}\label{sec:conclusions}
 
 ARP is a practical problem that needs to be solved during operations, therefore, the efficiency of the method in terms of computational time is a very important characteristic. Most of the works in the literature reach computational times of less than thirty minutes, however it is important that this limit is possible for large instances, that is, those with more than 400 flights. These two objectives are achieved in a few publications, which shows that there is room for advances in research. One factor that facilitates these objectives is the greater availability of high-performance computing infrastructure in recent years. This is important so that companies can, in fact, enjoy the benefits promised by these methods. Otherwise, the professional practice of disruption recovery will continue to be done manually in the operational centres. 
-\hl{The CHARP proposed in this work seeks to achieve these two objectives. We were able to find solutions, in less than thirty minutes, for thirty two data sets with flight, aircraft and airport disruptions. These data sets vary in size comprising a number of flights from 608 to  2178, aircraft from 85 to 618 and airport from 35 to 168. For each of the data sets the CHARP loads the respective data, introduces the disruptions and if necessary allocates times slots for new flights. We then select a sub-rotation starting in infeasible flight and proceed to recover it. The recovery procedure is done using an upper or a lower heuristic depending on the size of the search space. The recovery procedure will afterwards try to reconnect the first part of the rotation with the recovered one and for this purpose, if necessary, create taxi flights. In the impossibility of the latter the algorithm will cancel the flights in the recovered rotation until the continuity constraint be satisfied.}
+The CHARP proposed in this work seeks to achieve these two objectives. We were able to find solutions, in less than thirty minutes, for thirty two data sets with flight, aircraft and airport disruptions. These data sets vary in size comprising a number of flights from 608 to  2178, aircraft from 85 to 618 and airport from 35 to 168. For each of the data sets the CHARP loads the respective data, introduces the disruptions and if necessary allocates times slots for new flights. We then select a sub-rotation starting in infeasible flight and proceed to recover it. The recovery procedure is done using an upper or a lower heuristic depending on the size of the search space. The recovery procedure will afterwards try to reconnect the first part of the rotation with the recovered one and for this purpose, if necessary, create taxi flights. In the impossibility of the latter the algorithm will cancel the flights in the recovered rotation until the continuity constraint be satisfied.
 
 
 
@@ -402,9 +401,9 @@ ARP is a practical problem that needs to be solved during operations, therefore,
 
 
 % Acknowledgments here
-\ACKNOWLEDGMENT{The authors gratefully acknowledge the existence of
-the Journal of Irreproducible Results and the support of the Society
-for the Preservation of Inane Research.}
+%\ACKNOWLEDGMENT{The authors gratefully acknowledge the existence of
+%the Journal of Irreproducible Results and the support of the Society
+%for the Preservation of Inane Research.}
 
 
 % References here (outcomment the appropriate case)

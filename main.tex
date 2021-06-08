@@ -127,7 +127,7 @@ For each iteration over the aircraft rotation, the algorithm will perform a pinc
 
 \section{Introduction}
 
-The objective for airline companies consists in maximize their profits while operating flights according to a schedule. Therefore, airlines create tight schedules to increase their profitability. These tight schedules, have a minimum slack between flights legs, because they rely on the assumption that the flight legs will be operated as planned. A rotation consists in assigning an aircraft to a flight schedule while complying with operational constraints such as, aircraft maintenance, flight continuity, turn-round time and airport capacity for departure and arrival. Flight operations are on many occasions subject to irregularities that can complicate its execution. 
+The financial objective of airline companies is maximizing their profits while operating flights according to a schedule. Therefore, airlines create tight schedules to increase their profitability. These tight schedules, have a minimum slack between flights legs, because they rely on the assumption that the flight legs will be operated as planned. A rotation consists in assigning an aircraft to a flight schedule while complying with operational constraints such as, aircraft maintenance, flight continuity, turn-round time and airport capacity for departure and arrival. Flight operations are on many occasions subject to irregularities that can complicate its execution. 
 
 A considerable number of factors, such as mechanical failures, crew delays, problems with ground operations, industrial action, inclement weather, congestion at airports can cause disruptions such as flight delays or cancellations. As a result, the initial rotation becomes inefficient in the sense that flights must be delayed or cancelled. Since airline companies are liable to pay compensation for the resulting passenger inconvenience in these situations, leading to a negative financial impact on an airline’s profits, it thus becomes of the most importance to resume normal operations as quickly as possible. 
 
@@ -135,9 +135,9 @@ A considerable number of factors, such as mechanical failures, crew delays, prob
 
 In case of disruptions, it is necessary to recover the rotation during the period of time designated by the recovery time window (RTW). During the RTW a feasible rotation must be found that mitigates the impact of disruptions. This is process called disruption recovery.
 
-Disruption recovery is a real-time practice that requires finding a fast solution when irregularities occur. Often, disruptions take place during operations ($i.$ $e.$, only in few cases, it is possible to know a disruption in-advance), and a provisional plan must be provided quickly. Thus, it is necessary to construct efficient algorithms to have feasible solutions in minutes. It is also especially important to refer that when disruptions occur, they can affect more than just the directly disrupted flight and can send a shockwave of disruptions through the network.
+Disruption recovery is a real-time practice that requires finding a fast solution when irregularities occur. Often, disruptions take place during operations ($i.$ $e.$, only in few cases, it is possible to know a disruption in-advance), and a provisional plan must be provided quickly. Thus, it is necessary to construct efficient algorithms to have feasible solutions in minutes, moreover because when disruptions occur, they can affect more than just the directly disrupted flight and can send a shockwave of disruptions through the network.
 
-It is during RTW’s duration that actions should be implemented to re-plan usage of resources all over the entire network of flights. The objective that is intended to meet is to find a solution with minimal flight cancellation and delay, while meeting the constraints associated with flight time, aircraft or airport capacity and passenger itineraries. In this paper we will focus solely in recovering the aircraft rotation, also known as the aircraft recovery problem (ARP). To achieve this objective, we will use the data sets for the ROADEF 2009 Challenge. 
+It is during RTW’s duration that actions should be implemented to re-plan usage of resources all over the entire network of flights. The objective is to find a solution with minimal flight cancellation and delay, while meeting the constraints associated with flight time, aircraft or airport capacity and passenger itineraries. In this paper we will focus solely in recovering the aircraft rotation, also known as the aircraft recovery problem (ARP). To achieve this objective, we will use the data sets for the ROADEF 2009 Challenge. 
 \begin{comment}
 Every two years the \textit{French society of Operational Research and Decision Making} releases the ROADEF Challenge, which consists on a competition to solve a complex optimization problem that occurs in industry. In the ROADEF 2009 Challenge there is a step-wise simplification of a model, for disruption management in commercial aviation that aims at finding recovery planning of flights, aircraft assignments and passengers (including flight leg cancellation) on a given maximal horizon, so that a sum of penalties corresponding to various costs or discomforts is minimized. The present work is based on ROADEF 2009 Challengee and intends to develop a series of methodologies that will result in the generation of recovery processes for the disruptions induced by flight delays or cancellations, aircraft availability shortage or airport capacity decrease.\\
 
@@ -211,13 +211,13 @@ In \citep{peekstok2009} the authors propose a simulated annealing method with a 
 
 \section{The Model for the Aircraft Recovery Problem}\label{sec:modelARP}
 The ARP can be defined as the problem of modifying the aircraft rotation to compensate the presence of disruptions during operations that make the rotation infeasible. The strategy to overcome the disruptions, can only be implemented in a time window designated by recovery time window (RTW).\\
-	 We will use the ROADEF 2009 Challenge data set to validate the CHARP. This data set has thirty two data instances which have the files that will be used in our model. In the following subsections we will describe each of the files, namely in Subsection  \ref{subsec:airports} \textit{airports.csv}, in Subsection \ref{subsec:distance} \textit{dist.csv}, in Subsection \ref{subsec:aicraft}, in Subsection \ref{subsec:flightsRotations} \textit{flights.csv} and \textit{rotations.csv}, in Subsection \ref{subsec:flightDisr} \textit{alt\_flight.csv}, in Subsection \ref{subsec:aircraftDisr} \textit{alt\_aircraft.csv}, and in Subsection \ref{subsec:airportDisr} \textit{alt\_airport.csv}. Finally in Section \ref{sec:aircConstraints} we will describe the constraint that aircraft are subject to.
+	 We will use the ROADEF 2009 Challenge data set to validate the CHARP. This data set has thirty two data instances consisting of files that with different scenarios of disruption. In the following subsections we will describe each of the files, namely in Subsection  \ref{subsec:airports} \textit{airports.csv}, in Subsection \ref{subsec:distance} \textit{dist.csv}, in Subsection \ref{subsec:aicraft}, in Subsection \ref{subsec:flightsRotations} \textit{flights.csv} and \textit{rotations.csv}, in Subsection \ref{subsec:flightDisr} \textit{alt\_flight.csv}, in Subsection \ref{subsec:aircraftDisr} \textit{alt\_aircraft.csv}, and in Subsection \ref{subsec:airportDisr} \textit{alt\_airport.csv}. Finally in Section \ref{sec:aircConstraints} we will describe the constraint that aircraft are subject to.
 	 
 
 
 
 
-\subsection{Airports} \label{subsec:airports}
+\subsection{Airport Departure and Arrival Capacity} \label{subsec:airports}
 
 The key infrastructure in commercial aviation consists of airports. In this problem, they have also an essential role since their capacity consists of a hard constraint that bounds the maximum number of arrivals and departures per hour.
 The airports form a set $A$. For each $a \in A$ and for each window $ h \subseteq RTW $, the value $ c_a^{lh}$ is the maximum number of arrivals that can occur during the time window $h$ at airport $a$ and $c_a^{th}$ the maximum  number of departures. It is necessary to discretize these hourly capacities to incorporate them within the model's formulation. For example, the recovery time window between $ [\text{12:00}, 16:00[ $ comprises four unit time windows, and as an illustration, if the departure capacity of an airport between $\left[ 14:00, 15:00 \right[$ is equal to $3$, this indicates there can be at most three flights departing form this airport between 14:00 and 14:59.\\
@@ -250,7 +250,7 @@ The $dist.csv$ provides the typical flight times between each airport pair, as w
 \newline
 The above example provides the flight times between Nice airport and Paris-Charles de Gaulle (95 minutes in both directions) and specifies that the flight is domestic.
 
-\subsection{Aircraft} \label{subsec:aicraft}
+\subsection{Aircraft Specification } \label{subsec:aicraft}
 
 Let P denote the set of aircraft, where each aircraft $p \in  P$ has the following set of operational characteristics:\\
 \begin{itemize}
@@ -334,7 +334,7 @@ The above example describes the rotations of the Boeing 747 number 5, the Airbus
 	
 \subsection{Airport Disruptions} \label{subsec:airportDisr}
 Airport disruptions results in capacity reduction in the number of departures or arrivals per hour, caused by inclement weather or industrial action. The set of airport capacity reductions $\mathcal{R}$ is such that each reduction $ r \in \mathcal{R}$ is defined by a quadruplet $\langle a, h, z, c\rangle \in \mathcal{A} \times RTW \times {\{t, l\}} \times \mathbb{N}^{+}$  with $a$ the affected airport, $h$ the time window during which the capacity reduction occurs, $z$ the affected activity (departure or arrival), and $c$ the new capacity. 
-	The $alt\_airport.csv$ file provides the periods of temporary reductions in airport capacities.Each line contains the three-letter code of the airport where the reduction occurs, the date and time of the start of the period of reduction, the date and time of the end of the period of reduction, and the applicable departure and arrival 	capacities during the period of reduction. The capacities are non-negative integers $e.g.$:\\
+	The $alt\_airport.csv$ file provides the periods of temporary reductions in airport capacities. Each line contains the three-letter code of the airport where the reduction occurs, the date and time of the start of the period of reduction, the date and time of the end of the period of reduction, and the applicable departure and arrival 	capacities during the period of reduction. The capacities are non-negative integers $e.g.$:\\
 	\newline
 	{\texttt{\footnotesize LHR 20/01/08 04:00 20/01/08 10:00 0 2}}
 	\newline

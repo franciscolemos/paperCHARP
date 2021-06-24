@@ -18,39 +18,40 @@
 	%\maketitle
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% INTRO 1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
-	Given the original aircraft rotation and a set of disruptions the Constructive Heuristic for the Aircraft Recovery Problem (CHARP), creates a new combination of aircraft routings during the RTW that minimizes the number of flight cancellations and the amount of delay necessary to comply with the operational constraints. This procedure is based in Constraint Satisfaction Problems (CSP) and in the next Subsections we describe in detail the algorithms that compose the CHARP, namely in Subsection \ref{sec:newFlightsAlgo} the algorithm that creates the flights in the presence of flight or aircraft disruption, in Subsection \ref{sec:feasVer}  the algorithm that checks the rotation's feasibility, in Subsection \ref{sec:flightDomains} the algorithm that computes the domains for each flight, in Subsection \ref{sec:lowerHeuristic} the lower heuristic, in Subsection \ref{sec:upperHeuristic} the upper heuristic, in Subsection \ref{sec:backtracking}  the backtracking algorithm, in Subsection \ref{sec:taxiFlights} the taxi flights algorithm, and finally in Subsection \ref{sec:charp} the CHARP algorithm.
+	Given the original aircraft rotation and a set of disruptions the Constructive Heuristic for the Aircraft Recovery Problem (CHARP), creates a new combination of aircraft routings during the RTW that minimizes the number of flight cancellations and the amount of delay necessary to comply with the operational constraints. This procedure is based in constraint satisfaction  and in the next Subsections we describe in detail the algorithms that compose the CHARP, namely in Subsection \ref{sec:newFlightsAlgo} the algorithm that creates the flights in the presence of flight or aircraft disruption, in Subsection \ref{sec:feasVer}  the algorithm that checks the rotation's feasibility, in Subsection \ref{sec:flightDomains} the algorithm that computes the domains for each flight, in Subsection \ref{sec:lowerHeuristic} the lower heuristic, in Subsection \ref{sec:upperHeuristic} the upper heuristic, in Subsection \ref{sec:backtracking}  the backtracking algorithm, in Subsection \ref{sec:taxiFlights} the taxi flights algorithm, and finally in Subsection \ref{sec:charp} the CHARP algorithm.
 
 
 	\subsection{New Flights Algorithm} \label{sec:newFlightsAlgo}
+	
 	The algorithm starts by initializing the particular data instance after which it will loop through each aircraft and their rotations. After initializing the rotation the algorithm checks the rotation for cancelled flights or aircraft breakdown periods that also lead to flight cancellation. If these disruptions exist, the algorithm will then create new flights.
 	
 	
 	
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ALGORITHM 1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
-	Algorithm \ref{algo:newFlightAircDisr} describes the creation of new flights. The algorithm receives as inputs the aircraft rotation, the distance set, the maximum flight number, the aircraft breakdown period, and the end time of the recovery window. The algorithm will return the aircraft rotation with the new flight and the updated maximum flight number. This algorithm starts by initializing two subrotations containing available flight slots, the cancelled flights and the starting time from which new flights can be created. The algorithm will afterwards loop through the new flight slots and cancelled flights and calculate the departure time and the flight time (line 6). If the departure time added to the flight time of the new flight overshoots the end time of the recovery time window, the loop breaks and the algorithm returns the rotation with the new flights and the number of the last flight, furthermore the flight number is incremented a and the new flight slot is updated (lines 11 to 15). Finally the algorithm checks if the new flight's arrival time added with the transit time overshoots the end time of the recovery time window. If true, the algorithm breaks the loop  and returns the rotation with the new flights and the number of the last flight. An identical algorithm can be derived from algorithm \ref{algo:newFlightAircDisr} by simply allocating the new flight slots to those that were cancelled due to flight disruption.\\
+	Algorithm \ref{algo:newFlightAircDisr} describes the creation of new flights. The algorithm receives as inputs the aircraft rotation, the distance set $(\Delta)$, the maximum flight number $(M)$ , the aircraft breakdown period, and the end time of the recovery window. The algorithm will return the aircraft rotation with the new flight and the updated maximum flight number. This algorithm starts by initializing two subrotations containing available flight slots, the cancelled flights and the starting time from which new flights can be created. The algorithm will afterwards loop through the new flight slots and cancelled flights and calculate the departure time and the flight time (line 6). If the departure time added to the flight time of the new flight overshoots the end time of the recovery time window, the loop breaks and the algorithm returns the rotation with the new flights and the number of the last flight, furthermore the flight number is incremented and the new flight slot is updated (lines 11 to 15). Finally the algorithm checks if the new flight's arrival time added with the transit time overshoots the end time of the recovery time window. If true, the algorithm breaks the loop  and returns the rotation with the new flights and the number of the last flight. For flight cancellation, an identical algorithm can be derived from algorithm \ref{algo:newFlightAircDisr} by simply allocating the new flight slots to those that were cancelled.\\
 	
-	\begin{algorithm}[H]
+	\begin{algorithm}[]
 		\DontPrintSemicolon
 		
-		\KwInput{$ \sigma_p, \Delta, M, \mathcal{B}_b, RTW_e$}
-		\KwOutput{$ \sigma_p, M$}
-		$\sigma^n_p \gets$ List of available new flights in $\sigma_p$ \\
-		$\sigma^c_p \gets$ List of cancelled flights in $\sigma_p$ \\
+		\KwInput{$ \rho_p, \Delta, M, \mathcal{B}_b, RTW_e$}
+		\KwOutput{$ \rho_p, M$}
+		$\rho^n_p \gets$ List of available new flights in $\rho_p$ \\
+		$\rho^c_p \gets$ List of cancelled flights in $\rho_p$ \\
 		$start \gets$ end time of aircraft disruption $\mathcal{B}_b$\\
-		\For{ $\sigma^n_{p}(i), \sigma^c_p(i)$ in $\sigma^n_p, \sigma^c_p$}
+		\For{ $\rho^n_{p}(i), \rho^c_p(i)$ in $\rho^n_p, \rho^c_p$}
 		{
-			\If{$i \neq 0$} { $start \gets \sigma^{na}_p(i-1)  + t_{rp}$}
-			$\delta_{of} \gets \Delta(\sigma^{co}_p(i), \sigma^{cf}_p(i))$\\
+			\If{$i \neq 0$} { $start \gets \rho^{na}_p(i-1)  + t_{rp}$}
+			$\delta_{of} \gets \Delta(\rho^{co}_p(i), \rho^{cf}_p(i))$\\
 			\If{$start + \delta_{of}> RTW_e$}{break}
 			$M \gets M + 1$\\
-			$\sigma^n_p(i) = M$\\
-			$\sigma^{nd}_p(i) \gets start$ \\
-			$\sigma^{no}_p(i) \gets \sigma^{co}_p(i)$\\
-			$\sigma^{na}_p(i) \gets start + \delta_{of}$\\
-			$\sigma^{nf}_p(i) \gets \sigma^{cf}_p(i)$\\
-			\If{$\sigma^{na}_p(i) + t_{rp} > RTW_e$}{break}	
+			$\rho^n_p(i) = M$\\
+			$\rho^{nd}_p(i) \gets start$ \\
+			$\rho^{no}_p(i) \gets \rho^{co}_p(i)$\\
+			$\rho^{na}_p(i) \gets start + \delta_{of}$\\
+			$\rho^{nf}_p(i) \gets \rho^{cf}_p(i)$\\
+			\If{$\rho^{na}_p(i) + t_{rp} > RTW_e$}{break}	
 		}
-		return $\sigma_p, M$
+		return $\rho_p, M$
 		\caption{New flights from aircraft disruption}
 		\label{algo:newFlightAircDisr}
 	\end{algorithm}
@@ -58,6 +59,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ALGO 2 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
 \subsection{Feasibility Verification Algorithm} \label{sec:feasVer}
+
 The next step uses algorithm \ref{algo:feas} consists in traversing the rotation to find  if the following constraints are being respected:\\
 
 \begin{itemize}
@@ -74,19 +76,19 @@ The algorithm receives as inputs the aircraft rotation and the airport set. The 
 
 	\begin{algorithm}[H]
 		\DontPrintSemicolon
-		\KwInput{$ \sigma_p, \mathcal{A}$}
-		\KwOutput{$ \sigma_p, index$}
+		\KwInput{$ \rho_p, \mathcal{A}$}
+		\KwOutput{$ \rho_p, index$}
 		%new aircraft flights
-		$inf1 \gets continuity(\sigma_p)$\\		%continuity
-		$inf2 \gets tt(\sigma_p)$\\ 		%tt
-		$inf3 \gets dep(\sigma_p, \mathcal{A})$\\%dep
-		$inf4 \gets arr(\sigma_p, \mathcal{A})$\\%arr
-		$inf5 \gets maint(\sigma_p)$\\ %maint
+		$inf1 \gets continuity(\rho_p)$\\		%continuity
+		$inf2 \gets tt(\rho_p)$\\ 		%tt
+		$inf3 \gets dep(\rho_p, \mathcal{A})$\\%dep
+		$inf4 \gets arr(\rho_p, \mathcal{A})$\\%arr
+		$inf5 \gets maint(\rho_p)$\\ %maint
 		$inf \gets inf1 \cup inf2 \cup inf3 cup inf4 \cup inf5$\\
 		\If {$inf \ne \{\}$} %if infeasible
 		{
-			$index \gets min(infList)$\\
-			return $\sigma_p, index$\\
+			$index \gets min(inf)$\\
+			return $\rho_p, index$\\
 		}
 		\Else{return $[], -1$ }%if feasible
 		\caption{Feasibility verification}
@@ -96,37 +98,38 @@ The algorithm receives as inputs the aircraft rotation and the airport set. The 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% ALGO 3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Flight Domains Algorithm} \label{sec:flightDomains}
-Starting at the first infeasible flight in the infeasible rotation the next step of the recovery procedure consists of an algorithm that searches for each flight, of this part of the rotation, the domain where it is possible to depart and land without breaching airport departure and arrival capacity constraints. This search is done incrementally, and it will allow to delay the rotation’s flights. Added to the latter, and except those flights that are already subject to a disruptive delay, the algorithm also adds the option to cancel the flight as a delay valued -1. To implement this procedure, algorithm \ref{algo:flightDomains} receives as inputs the infeasible rotation, the airport capacity, the maximum amount of delay and the delay increment. After initializing the variables to save the rotation's flight domains, singletons, and size of the search space (line 1 to 3) the algorithm loops through the rotation to compute and retrieve their respective values. The flight domain is initialized in line 5 and if it has been disrupted its domain assumes a single value of zero thus becoming a singleton (line 7). If the singleton makes the recovery infeasible by breaking the airport capacity constraint it will be added to the singleton list and the algorithm loops to the next flight in the rotation (line 8 and 9). If the flight departs outside the recovery the algorithm will simply return the flight ranges, the singleton list and the total number of combinations. If the flight is neither disrupted nor departs outside the recovery time window, then the algorithm adds the cancellation option. Afterwards it will loop incrementally through the range of delay values starting at zero and add any of them that make the flight feasible (lines 14 to 20). In lines 21 and 22 the algorithm adds the domain to the flight domains dictionary and updates the number of combinations. \\
+
+Starting at the first infeasible flight in the infeasible rotation the next step of the recovery procedure consists of an algorithm that searches for each flight, in the second subrotation, the domain where it is possible to depart and land without breaching airport departure and arrival capacity constraints. This search is done incrementally, and it will allow to delay the rotation’s flights. Added to the latter, and except those flights that are already subject to a disruptive delay, the algorithm also adds the option to cancel the flight as a delay valued -1. To implement this procedure, algorithm \ref{algo:flightDomains} receives as inputs the infeasible rotation, the airport capacity, the maximum amount of delay and the delay increment. After initializing the variables to save the rotation's flight domains, singletons, and size of the search space (line 1 to 3) the algorithm loops through the rotation to compute and retrieve their respective values. The flight domain is initialized in line 5 and if it has been disrupted its domain assumes a single value of zero thus becoming a singleton (line 7). If the singleton makes the recovery infeasible by breaking the airport capacity constraint it will be added to the singleton list and the algorithm loops to the next flight in the rotation (line 8 and 9). If the flight departs outside the recovery the algorithm will simply return the flight ranges, the singleton list and the total number of combinations. If the flight is neither disrupted nor departs outside the RTW, then the algorithm adds the cancellation option. Afterwards it will loop incrementally through the range of delay values starting at zero and add any of them that make the flight feasible (lines 14 to 20). In lines 21 and 22 the algorithm adds the domain to the flight domains dictionary and updates the number of combinations. \\
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ALGORITHM 3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
 		\begin{algorithm}[H]
 		\DontPrintSemicolon
-		\KwInput{$ \sigma_p, \mathcal{A}, maxDelay, delayIncrement$}
+		\KwInput{$ \rho_p, A, maxDelay, delayIncrement$}
 		\KwOutput{$flightDomain, singletonList, totalCombos$}
 		$flightDomain \gets \{\}$\\
 		$singletonList \gets \{\}$\\
 		$totalCombos \gets 1$\\
-		\For{ $\sigma_p(i)$ in $\sigma_p$ }
+		\For{ $\rho_p(i)$ in $\rho_p$ }
 		{
 			$domain \gets \{\}$\\
-			\If{$\sigma_p(i) \cap \mathcal{D}_d \ne \{\}$}{
+			\If{$\rho_p(i) \cap \Delta_d \ne \{\}$}{
 				$domain \gets domain \cup \{0\}$\\
-				$checkSingleton(\sigma_p(i), \mathcal{A}, singletonList)$\\
+				$checkSingleton(\rho_p(i), \mathcal{A}, singletonList)$\\
 				continue\\}
-			\If{$(\sigma^d_p(i) < RTW_s) \lor (\sigma^d_p(i) > RTW_e)$}
+			\If{$(\rho^d_p(i) < RTW_s) \lor (\rho^d_p(i) > RTW_e)$}
 				{return $flightDomain, singletonList, totalCombos$\\}
 			$domain \gets domain \cup \{-1\}$\\ %cancel the flight
 			\For{$delay$ in $range(0, maxDelay, delayIncrement)$}{
-				$dep \gets \sigma^d_p(i)$\\
-				$arr \gets \sigma^a_p(i)$\\
+				$dep \gets \rho^d_p(i)$\\
+				$arr \gets \rho^a_p(i)$\\
 				$ dep \gets dep + delay$\\
 				$ arr \gets arr + delay$\\
-				$ \sigma^\prime_p(i) \gets \sigma_p(i, dep, arr)$\\
-				\If{$(dep(\sigma^\prime_p(i), \mathcal{A}) = []) \land (arr(\sigma^\prime_p(i), \mathcal{A}) = [])$}{
+				$ \rho^\prime_p(i) \gets \rho_p(i, dep, arr)$\\
+				\If{$(dep(\rho^\prime_p(i), \mathcal{A}) = []) \land (arr(\rho^\prime_p(i), \mathcal{A}) = [])$}{
 					$domain \gets domain \cup delay$
 				}
 			}
-			$flightDomain[\sigma_p(i)] \gets domain$\\
+			$flightDomain[\rho_p(i)] \gets domain$\\
 			$totalCombos \gets totalCombos * |domain|$\\
 		}
 		return $flightDomain, singletonList, totalCombos$
@@ -177,8 +180,8 @@ The lower bound is initialized by default at $4 \times 10^4$, and the lower heur
 \begin{algorithm}[]
 	\DontPrintSemicolon
 	
-	\KwInput{$ \sigma_p, index, matrix $}
-	\KwOutput{$\sigma^\prime_p$}
+	\KwInput{$ \rho_p, index, matrix $}
+	\KwOutput{$\rho^\prime_p$}
 	$bestSol \gets \{\}$\\
 	\For{ $row$ in $matrix$ }
 	{
@@ -189,15 +192,15 @@ The lower bound is initialized by default at $4 \times 10^4$, and the lower heur
 			\If{$newSol[0] < bestSol[0]$}{continue}
 			\If{$(newSol[0] = bestSol[0]) \land (newSol[1] > bestSol[1])$}{continue}
 		}
-		$\sigma^\prime_p \gets \sigma_p(row)$\\
-		\If{$continuity(\sigma^\prime_p) \ne \{\}$}{continue}		%continuity
-		\If{$tt(\sigma^\prime_p) \ne \{\}$}{continue} %tt
-		\If{$maint(\sigma^\prime_p) \ne \{\}$}{continue} %maint
+		$\rho^\prime_p \gets \rho_p(row)$\\
+		\If{$continuity(\rho^\prime_p) \ne \{\}$}{continue}		%continuity
+		\If{$tt(\rho^\prime_p) \ne \{\}$}{continue} %tt
+		\If{$maint(\rho^\prime_p) \ne \{\}$}{continue} %maint
 		$bestSol \gets newSol$\\
 		
 	}
-	$\sigma^\prime_p \gets \sigma_p(bestSol[2]) $\\
-	return $\sigma^\prime_p$
+	$\rho^\prime_p \gets \rho_p(bestSol[2]) $\\
+	return $\rho^\prime_p$
 	\caption{Lower heuristic}
 	\label{algo:lowerHeuristic}
 \end{algorithm}
@@ -213,12 +216,12 @@ The upper heuristic's upper bound is initialized at $3 \times 10^{12}$ by defaul
 \begin{algorithm}[]
 	\DontPrintSemicolon
 	
-	\KwInput{$ \sigma_p, index, flightDomains$}
-	\KwOutput{$\sigma_p$}
+	\KwInput{$ \rho_p, index, flightDomains$}
+	\KwOutput{$\rho_p$}
 	$lIndex \gets index$ \\
-	$uIndex, partialFlightDomains \gets upperIndex(lIndex, \sigma_p, flightDomains)$ \\
+	$uIndex, partialFlightDomains \gets upperIndex(lIndex, \rho_p, flightDomains)$ \\
 	$matrix \gets product(partialFlightDomains.values())$ \\
-	$removeFlightDomains(flightDomains, \sigma_p(i) \forall i \in [uIndex, |\sigma_p|])$\\
+	$removeFlightDomains(flightDomains, \rho_p(i) \forall i \in [uIndex, |\rho_p|])$\\
 	\While{True}{
 		$bestSol \gets \{\}$\\
 		\For{$row$ in $matrix$}{
@@ -229,20 +232,20 @@ The upper heuristic's upper bound is initialized at $3 \times 10^{12}$ by defaul
 				\If{$newSol[0] < bestSol[0]$}{continue}
 				\If{$(newSol[0] = bestSol[0]) \land (newSol[1] > bestSol[1])$}{continue}
 			}
-			$\sigma^\prime_p(i) \gets \sigma_p(row)$\\
-			\If{$continuity(\sigma^\prime_p) \ne \{\}$}{continue}		%continuity
-			\If{$tt(\sigma^\prime_p) \ne \{\}$}{continue} %tt
+			$\rho^\prime_p(i) \gets \rho_p(row)$\\
+			\If{$continuity(\rho^\prime_p) \ne \{\}$}{continue}		%continuity
+			\If{$tt(\rho^\prime_p) \ne \{\}$}{continue} %tt
 			$bestSol \gets newSol$\\
 		
 		}
-		$\sigma_p = newPartialRotation(bestSol[2], \sigma_p(i) \forall i \in [lIndex:uIndex])$\\
+		$\rho_p = newPartialRotation(bestSol[2], \rho_p(i) \forall i \in [lIndex:uIndex])$\\
 		
-		\If{$uIndex = |\sigma_p|$}{return $\sigma_p$}
+		\If{$uIndex = |\rho_p|$}{return $\rho_p$}
 		\Else{	
 			$lIndex \gets uIndex$\\
-			$uIndex, partialFlightDomains \gets upperIndex(lIndex, \sigma_p, flightDomains)$\\
+			$uIndex, partialFlightDomains \gets upperIndex(lIndex, \rho_p, flightDomains)$\\
 			$matrix \gets product(partialFlightDomains.values())$ \\
-			$removeFlightDomains(flightDomains, \sigma_p(i) \forall i \in [uIndex, |\sigma_p|])$\\
+			$removeFlightDomains(flightDomains, \rho_p(i) \forall i \in [uIndex, |\rho_p|])$\\
 		}
 
 	}
@@ -268,14 +271,14 @@ and decrements the upper bound. % by 99.99 * 10^6.%
 %
 \subsection{Backtracking Algorithm} \label{sec:backtracking}
 
-In CSP it is common to find variables that have domain size 1, such variables are designated by singletons. Since both heuristics are based in CSP, the rotations that we know in advance having variables with domain size 1, are handled first. In case of rotations with schedule maintenance, the algorithm treats them as a flight without turn round time and with the same origin and destination.  Thus, when the algorithm creates the aircraft list, the first aircraft have scheduled maintenance. The flights that are disrupted with delays are designated by fixed flights and they too cannot be moved. In this case the domain is a singleton consisting of value \{0\} and if this value is infeasible, because there are no available departure and/or arrival airport capacity, the algorithm backtracks by removing the rotation of an aircraft that can release the necessary airport capacity.
+In CSP it is common to find variables that have domain size 1, such variables are designated by singletons. Since both heuristics are based in constraint satisfaction, the rotations that we know in advance having variables with domain size 1, are handled first. In case of rotations with schedule maintenance, the algorithm treats them as a flight without turn round time and with the same origin and destination.  Thus, when the algorithm creates the aircraft list, the first aircraft have scheduled maintenance. The flights that are disrupted with delays are designated by fixed flights and they too cannot be moved. In this case the domain is a singleton consisting of value \{0\} and if this value is infeasible, because there is no available departure and/or arrival airport capacity, the algorithm backtracks by removing the rotation of an aircraft that can release the necessary airport capacity.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ALGORITHM 6 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Algorithm \ref{algo:backtracking} receives as inputs the singleton list, the airport capacity, the ARP current solution, the rotation and the index of the first infeasibility. The algorithm will return the ARP solution without the rotation that will allow the singleton to become feasible and the updated aircraft list. This algorithm will loop while the singleton list is not empty and will verify if the first singleton's infeasibility is on the departure and/or in the arrival airport capacity. Depending on the situation the algorithm computes the airport time slot for the departure/arrival and based on the origin/destination airport searches the  aircraft to cancel. The algorithm will then remove the aircraft from the solution list, and the respective rotation from the ARP solution. Finally, we will use algorithm \ref{algo:flightDomains} to determine there are any more infeasible singletons.
+Algorithm \ref{algo:backtracking} receives as inputs the singleton list, the airport capacity, the aircraft whose rotation is feasible, the ARP current solution, the aircraft rotation and the index of the first infeasibility. The algorithm will return the ARP solution without the rotation that will allow the singleton to become feasible and the updated aircraft list. This algorithm will loop while the singleton list is not empty and will verify if the first singleton's infeasibility is on the departure and/or in the arrival airport capacity. Depending on the situation the algorithm computes the airport time slot for the departure/arrival and based on the origin/destination airport searches the  aircraft to cancel. The algorithm will then remove the aircraft from the solution list, and the respective rotation from the ARP solution. Finally, we will use algorithm \ref{algo:flightDomains} to determine if there are any more infeasible singletons.
 \begin{algorithm}[H]
 	\DontPrintSemicolon
-	\KwInput{$ singletonList, \mathcal{A}, aircraftSolList, solutionARP, \sigma_p, index $}
+	\KwInput{$ singletonList, A, aircraftSolList, solutionARP, \rho_p, index $}
 	\KwOutput{$solutionARP, aircraftSolList$}
 	\While{$ singletonList \ne \{\}$}{
 		
@@ -287,7 +290,7 @@ Algorithm \ref{algo:backtracking} receives as inputs the singleton list, the air
 			$airc2Cancel \gets updateMulti(flight2Cancel, \mathcal{A}, solutionARP])$\\
 			$aircraftSolList \gets aircraftSolList - airc2Cancel$\\
 			$solutionARP.pop(airc2Cancel)$\\
-			$flightRanges, singletonList, totalCombos \gets domainFlights(\sigma_p(i) \forall i \in [index, |\sigma_p|], \mathcal{A}, index)$\\
+			$flightRanges, singletonList, totalCombos \gets domainFlights(\rho_p(i) \forall i \in [index, |\rho_p|], \mathcal{A}, index)$\\
 		}
 		\If{$singleton(0) = 'arr'$}{
 			$startInt \gets 60 * int(singleton^a(0)/60)$\\
@@ -297,7 +300,7 @@ Algorithm \ref{algo:backtracking} receives as inputs the singleton list, the air
 			$airc2Cancel \gets updateMulti(flight2Cancel, \mathcal{A}, solutionARP)$\\
 			$aircraftSolList \gets aircraftSolList - airc2Cancel$\\
 			$solutionARP.pop(airc2Cancel)$\\
-			$flightRanges, singletonList, totalCombos \gets domainFlights(\sigma_p(i) \forall i \in [index, |\sigma_p|], \mathcal{A}, index)$\\
+			$flightRanges, singletonList, totalCombos \gets domainFlights(\rho_p(i) \forall i \in [index, |\rho_p|], \mathcal{A}, index)$\\
 		}
 
 	}
@@ -308,31 +311,31 @@ Algorithm \ref{algo:backtracking} receives as inputs the singleton list, the air
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ALGO 7 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Taxi Flights Algorithm} \label{sec:taxiFlights}
-After finding a feasible solution for the part of the rotation that was initially infeasible the algorithm tries to reconnect both parts but on occasions it is possible to find discontinuities between them. Algorithm \ref{algo:taxiFlights}  receives as inputs the set of aircraft disruptions, the set of distances, the origin airport, the recovered rotation the maximum flight number and returns the updated recovered rotation and the maximum flight number. Algorithm \ref{algo:taxiFlights} will either create a taxi flight to connect the first part of the rotation and the recovered one, or cancel flights in the recovered rotation until the continuity infeasibility is removed. 
+After finding a feasible solution for the second subrotation the algorithm tries to reconnect both parts but on occasions it is possible to find discontinuities between them. Algorithm \ref{algo:taxiFlights}  receives as inputs the set of aircraft disruptions, the set of distances, the origin airport, the recovered rotation, the maximum flight number. As for the output, it returns the updated recovered rotation and the maximum flight number. Algorithm \ref{algo:taxiFlights} will either create a taxi flight to connect the first part of the rotation and the recovered one, or cancel flights in the recovered rotation until the continuity infeasibility is removed. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ALGORITHM 7 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{algorithm}[]
 	\DontPrintSemicolon
-	\KwInput{$ \mathcal{B},\Delta, originAirport, \sigma_p, \mathcal{A}, M $}
-	\KwOutput{$\sigma_p, M$}
-	$originSlots \gets \mathcal{A}[originAirport]$ if $capDep > noDep $\\
-	\For{$\sigma_p(i)$ in $\sigma_p$}{
-		\If{$\sigma^o_p(i) = originAirport$}{
-			return $\sigma_p$, M	
+	\KwInput{$ \mathcal{B},\Delta, originAirport, \rho_p, A, M $}
+	\KwOutput{$\rho_p, M$}
+	$originSlots \gets A[originAirport]$ if $capDep > noDep $\\
+	\For{$\rho_p(i)$ in $\rho_p$}{
+		\If{$\rho^o_p(i) = originAirport$}{
+			return $\rho_p$, M	
 		}
-		$\delta_{of} \gets \Delta(originAirport, \sigma^{o}_p(i))$\\
+		$\delta_{of} \gets \Delta(originAirport, \rho^{o}_p(i))$\\
 		
-		$originSlotsUpper \gets  originSlots$ if $endInt > \sigma^d_p(i) - \delta_{of} -t_{rp}$\\
+		$originSlotsUpper \gets  originSlots$ if $endInt > \rho^d_p(i) - \delta_{of} -t_{rp}$\\
 		$originSlotsLower \gets originSlots - originSlotsUpper - [\mathcal{B}^s_p, \mathcal{B}^e_p]$\\
 		\If{$originSlotsLower = \{\} $}{
-			cancel($\sigma_p(i)$)\\
+			cancel($\rho_p(i)$)\\
 			continue}
-		$destinationSlots \gets \mathcal{A}[\sigma^o_p]$ if $capArr > noArr $\\
-		$destinationSlotsUpper \gets  destinationSlots$ if $endInt > \sigma^d_p(i) -t_{rp}$\\
+		$destinationSlots \gets \mathcal{A}[\rho^o_p]$ if $capArr > noArr $\\
+		$destinationSlotsUpper \gets  destinationSlots$ if $endInt > \rho^d_p(i) -t_{rp}$\\
 		$destinationSlotsLower \gets destinationSlots - destinationSlotsUpper - [\mathcal{B}^s_p, \mathcal{B}^e_p]$\\
 		\If{$destinationSlotsLower = \{\} $}{
-			cancel($\sigma_p(i)$)\\
+			cancel($\rho_p(i)$)\\
 			continue}
 		$destIntervals \gets \{\}$\\
 		$i \gets -1$\\
@@ -346,19 +349,19 @@ After finding a feasible solution for the part of the rotation that was initiall
 			\If{$i \ne -1$}{	
 				$taxiFlight^o \gets originAirport$\\
 				$taxiFlight^d \gets os['startInt'] + offset$\\
-				$taxiFlight^f = \sigma^o_p(i)$\\
+				$taxiFlight^f = \rho^o_p(i)$\\
 				$taxiFlight^a = taxiFlight^d + \delta_{of}$\\
 				$taxiFlight['flight'] = M$\\
 				$M \gets M + 1$\\
-				$\sigma_p \gets \sigma_p + taxiFlight$\\
-				return $\sigma_p, M$\\}
+				$\rho_p \gets \rho_p + taxiFlight$\\
+				return $\rho_p, M$\\}
 		}
 	}
 	\caption{Taxi flights}
 	\label{algo:taxiFlights}
 \end{algorithm}
 
-It starts in line 1  initializing the origin slots where there is available departure capacity. Afterwards the algorithm will loop through the flights of the recovered rotation  and if their origin is the same as origin airport it returns the updated recovered rotation and the maximum flight number (lines 2 to 4). In line 5 the algorithm computes the distance from the origin airport and the origin of the flight in the recovered rotation. In line 6 the algorithm extracts the upper slots from the origin slots by subtracting to the flight's departure time in the recovered rotation the distance and the turn round time. In line 7 the upper slots and the aircraft breakdown period are subtracted to the origin slots in order to retrieve the lower slots from where the aircraft can depart. If there are no available departure slots the algorithm cancels the flight in the recovered rotation and continues to the next flight (lines 8 to 10). If there are available departure slots at the origin, the algorithm tries to find destination slots with available airport arrival capacity. To achieve the latter the algorithm finds the destination slots with available capacity, the upper destination slots, and by subtracting the latter to the former and aircraft breakdown period determines the lower destination slots (lines 11 to 13). If there are no lower destination slots, the algorithm cancels the flight in the recovered rotation and continues to the next flight. Since $\mathcal{A}$ is a dictionary, it is necessary to extract the destination intervals and initialize the destination index $i$ and the time offset from which the flight departs and arrives in feasible airport slots (lines 17 to 21). The algorithm will then loop through the destination slots and in line 23 it will initialize the object $obj$ with the starting and end time of the origin lower slots plus the distance and, in line 24 determine the index of intersection in the destination slot and the offset. If the index $i$ is different from -1 the algorithm will the taxi flight and add it to the recovered rotation (lines 25 to 33).\\ 
+It starts in line 1  initializing the origin slots where there is available departure capacity. Afterwards the algorithm will loop through the flights of the recovered rotation  and if their origin is the same as origin airport it returns the updated recovered rotation and the maximum flight number (lines 2 to 4). In line 5 the algorithm computes the distance from the origin airport and the origin of the flight in the recovered rotation. In line 6 the algorithm extracts the upper slots from the origin slots by subtracting to the flight's departure time in the recovered rotation the distance and the turn round time. In line 7 the upper slots and the aircraft breakdown period are subtracted to the origin slots in order to retrieve the lower slots from where the aircraft can depart. If there are no available departure slots the algorithm cancels the flight in the recovered rotation and continues to the next flight (lines 8 to 10). If there are available departure slots at the origin, the algorithm tries to find destination slots with available airport arrival capacity. To achieve the latter the algorithm finds the destination slots with available capacity, the upper destination slots, and by subtracting the latter to the former and aircraft breakdown period, it  determines the lower destination slots (lines 11 to 13). If there are no lower destination slots, the algorithm cancels the flight in the recovered rotation and continues to the next flight. Since $A$ is a dictionary, it is necessary to extract the destination intervals and initialize the destination index $i$ and the time offset from which the flight departs and arrives in feasible airport slots (lines 17 to 21). The algorithm will then loop through the destination slots and in line 23 it will initialize the object $obj$ with the starting and end time of the origin lower slots plus the distance and, in line 24 determines the index of intersection in the destination slot and the offset. If the index $i$ is different from -1 the algorithm will create the taxi flight and add it to the recovered rotation (lines 25 to 33).\\ 
 
 \subsection{The CHARP} \label{sec:charp}
 
@@ -369,7 +372,7 @@ If the size of the search space is lower than the lower bound the algorithm uses
  \begin{figure}[h!]
 	\centering
 	\includegraphics[scale=0.65]{figures/mainAlgo.png}
-	\caption[]{Constructive Heuristic}
+	\caption[]{Constructive Heuristic for Aircraft Recovery Problem (CHARP)}
 	\label{fig:mainAlgo}
 \end{figure}
 
